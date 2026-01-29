@@ -5,11 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Portfolio</title>
     <style>
-        /* ▼▼▼ 基本設定（変更なし） ▼▼▼ */
+        /* ▼▼▼ デザイン変数の定義（ダークモード・宇宙仕様） ▼▼▼ */
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.45); /* 少し濃いめに */
-            --glass-border: rgba(255, 255, 255, 0.6);
-            --text-main: #333;
+            /* ガラスの背景：白(255,255,255)をかなり薄く(0.1)して、黒背景に馴染ませる */
+            --glass-bg: rgba(255, 255, 255, 0.1); 
+            /* ガラスの枠線：少しだけ明るくして、エッジを立たせる */
+            --glass-border: rgba(255, 255, 255, 0.2);
+            /* 文字色：真っ白(#fff)に近いオフホワイト */
+            --text-main: #f0f0f0;
+            /* 背景色：宇宙っぽい深い黒〜ダークグレーのグラデーション */
+            --bg-gradient: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            
             --font-base: 'Helvetica Neue', Arial, sans-serif;
         }
 
@@ -18,281 +24,48 @@
             padding: 0;
             font-family: var(--font-base);
             color: var(--text-main);
-            /* 背景グラデーション */
-            background: linear-gradient(-45deg, #252525, #424242, #121212, #353535);
-            background-size: 400% 400%;
-            animation: gradientBG 10s ease infinite;
+            background: var(--bg-gradient);
+            /* 背景を固定して、スクロールしても宇宙が奥にある感じにする */
+            background-attachment: fixed; 
+            overflow-x: hidden; /* 横スクロール禁止 */
         }
 
-        @keyframes gradientBG { 
-            0% { background-position: 0% 50%; } 
-            50% { background-position: 100% 50%; } 
-            100% { background-position: 0% 50%; } 
-        }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        a:hover { opacity: 0.7; }
 
-        a { text-decoration: none; color: inherit; }
-
-        /* ▼▼▼ ガラスボックスの共通クラス ▼▼▼ */
+        /* ▼▼▼ ガラスボックスの共通デザイン（最適化済み） ▼▼▼ */
         .glass-box {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 24px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
-            padding: 40px;
+            /* 背景のぼかし：これを強くするとすりガラス感が強まる */
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            /* 影：黒い影を落として、浮遊感を強調 */
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            padding: 30px;
         }
 
-        /* ▼▼▼ トップ画面（ヒーローセクション） ▼▼▼ */
+        /* ▼▼▼ 1. トップ画面（ヒーローセクション） ▼▼▼ */
         .hero-section {
             height: 100vh;
             width: 100%;
             position: relative;
             overflow: hidden;
-            /* 次のセクションとの区切りの余白 */
-            margin-bottom: 100px;
+            display: flex; /* 中身の配置用 */
+            justify-content: center;
+            align-items: center;
         }
 
-        .nav-box {
+        /* --- 背景スライドショーの設定 --- */
+        .hero-slideshow {
             position: absolute;
-            top: 50px; left: 50px; width: 200px; z-index: 10;
-        }
-        .nav-list { list-style: none; padding: 0; margin: 0; }
-        .nav-list li { margin-bottom: 15px; cursor: pointer; transition: 0.3s; }
-        .nav-list li:hover { letter-spacing: 0.1em; }
-
-        .title-box {
-            position: absolute;
-            bottom: 80px; right: 50px; width: 350px; text-align: right; z-index: 10;
-        }
-        .title-box h1 { font-size: 3rem; font-weight: 200; margin: 0; letter-spacing: 0.1em; }
-
-        /* ▼▼▼ パララックス作品エリア（今回のメイン） ▼▼▼ */
-        .works-container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding-bottom: 200px; /* 最後の余白 */
-        }
-
-        .section-header {
-            text-align: center;
-            font-size: 2rem;
-            font-weight: 200;
-            margin-bottom: 100px;
-            opacity: 0.5;
-        }
-
-        /* ★作品ごとの巨大なコンテナ
-           ここを「高さ 150vh (画面1.5個分)」などにすることで、
-           スクロールする距離（＝演出の時間）を稼ぎます。
-        */
-        .project-wrapper {
-            position: relative; /* 子要素の基準点 */
-            height: 180vh;      /* かなり縦長にする（ここを増やすとゆっくり見せられる） */
-            margin-bottom: 100px; /* 次の作品までの間隔 */
-            display: flex;      /* レイアウト用 */
-            justify-content: flex-end; /* テキストを右側に寄せる */
-        }
-        
-        /* 偶数番目の作品はレイアウトを左右逆にする */
-        .project-wrapper:nth-child(even) {
-            justify-content: flex-start; /* 左側に寄せる */
-        }
-
-        /* ★魔法のテキストボックス
-           position: sticky を使うと、スクロールしても
-           指定した位置(top: 20%)で画面に張り付きます。
-           親のエリア(.project-wrapper)が終わると、一緒に消えていきます。
-        */
-        .sticky-text-card {
-            position: sticky; /* 張り付き設定 */
-            top: 30vh;        /* 画面の上から30%の位置で止まる */
-            height: fit-content; /* 中身の分だけ高さを取る */
-            width: 350px;     /* 幅固定 */
-            z-index: 10;      /* 画像より手前に表示 */
-            margin: 0 50px;   /* 横の余白 */
-            
-            /* ガラスデザイン */
-            background: rgba(255, 255, 255, 0.65); /* 文字が読みやすいように少し不透明度UP */
-            backdrop-filter: blur(15px);
-            border-radius: 20px;
-            padding: 40px;
-            border: 1px solid rgba(255,255,255,0.8);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-        }
-
-        .work-title { font-size: 2rem; font-weight: 300; margin: 0 0 15px 0; }
-        .work-desc { font-size: 0.9rem; line-height: 1.8; margin-bottom: 30px; }
-        .goto-btn { border-bottom: 1px solid #333; padding-bottom: 5px; font-size: 0.9rem; transition: 0.3s; }
-        .goto-btn:hover { padding-bottom: 8px; opacity: 0.6; }
-
-
-        /* ★画像のグループ
-           テキストとは無関係に絶対配置でばら撒きます
-        */
-        .images-group {
-            position: absolute; /* 親要素に対して自由配置 */
             top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; /* 画像がクリックの邪魔をしないようにする */
-            z-index: 1; /* テキストより奥に */
+            z-index: 0; /* 一番奥に配置 */
         }
 
-        /* 共通の画像スタイル */
-        .floating-img {
+        .slide-img {
             position: absolute;
-            border-radius: 15px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-            object-fit: cover;
-            transition: transform 0.5s ease; /* ふわっと動く */
-        }
-
-        /* --- 画像1：メイン（一番大きい） --- */
-        .img-main {
-            width: 70vw;       /* 画面幅の半分 */
-            max-width: 700px;
-            top: 15%;          /* 配置位置：上から */
-            left: 5%;          /* 配置位置：左から */
-        }
-        /* 偶数番目の作品のメイン画像位置 */
-        .project-wrapper:nth-child(even) .img-main {
-            left: auto; right: 5%; /* 右側に配置 */
-        }
-
-        /* --- 画像2：サブ（小さめ、少しぼかす） --- */
-        .img-sub-1 {
-            width: 250px;
-            top: 55%;
-            left: 60%;
-            opacity: 0.9;
-            filter: blur(1px); /* 遠近感を出すために少しぼかす */
-        }
-
-        /* --- 画像3：サブ（もっと小さい、遠くにある感じ） --- */
-        .img-sub-2 {
-            width: 180px;
-            top: 10%;
-            right: 10%;
-            opacity: 0.8;
-            filter: blur(2px);
-        }
-        /* 偶数番目の調整 */
-        .project-wrapper:nth-child(even) .img-sub-2 {
-            right: auto; left: 10%;
-        }
-
-
-        /* ▼▼▼ スマホ対応（縦並びにリセット） ▼▼▼ */
-        @media (max-width: 768px) {
-            .hero-section .nav-box { top: 20px; left: 20px; width: 150px; }
-            .hero-section .title-box { bottom: 40px; right: 20px; width: 280px; }
-            .hero-section .title-box h1 { font-size: 2rem; }
-
-            /* スマホでは複雑なパララックスを解除して縦並びに見やすくする */
-            .project-wrapper { height: auto; display: block; margin-bottom: 80px; }
-            .project-wrapper:nth-child(even) { display: block; }
-            
-            .sticky-text-card {
-                position: relative; /* 張り付き解除 */
-                top: 0;
-                width: auto;
-                margin: 0 20px 40px 20px; /* 画像の下に配置 */
-            }
-
-            /* 画像エリアの高さ確保 */
-            .images-group {
-                position: relative;
-                height: 400px; /* 画像を表示するエリアの高さ */
-                margin-bottom: -50px; /* テキストに少しかぶせる */
-            }
-
-            .img-main { width: 80%; top: 0; left: 10%; }
-            .img-sub-1 { width: 150px; top: 60%; left: 5%; }
-            .img-sub-2 { width: 100px; top: 10%; right: 5%; }
-        }
-    </style>
-</head>
-<body>
-
-    <section class="hero-section">
-        <nav class="glass-box nav-box">
-            <ul class="nav-list">
-                <li><a href="#works">Artwork</a></li>
-                <li><a href="#">Bio / CV</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </nav>
-        <div class="glass-box title-box">
-            <h1>PORTFOLIO</h1>
-            <p>Installation Art / Design</p>
-        </div>
-    </section>
-
-
-    <div id="works" class="works-container">
-        <h2 class="section-header">Latest Works</h2>
-
-        <div class="project-wrapper">
-            
-            <div class="images-group">
-                <img src="https://placehold.co/600x400/eeeeee/999999/png" class="floating-img img-main" alt="Main Art">
-                <img src="https://placehold.co/300x300/dddddd/888888/png" class="floating-img img-sub-1" alt="Sub Art 1">
-                <img src="https://placehold.co/200x200/cccccc/777777/png" class="floating-img img-sub-2" alt="Sub Art 2">
-            </div>
-
-            <div class="sticky-text-card">
-                <h3 class="work-title">Brainwave Install</h3>
-                <p class="work-desc">
-                    EEG Sensor, Unreal Engine 5<br>
-                    2025
-                </p>
-                <p style="font-size: 0.9rem; margin-bottom: 20px;">
-                    脳波データをリアルタイムで解析し、音と光に変換するインスタレーション。<br>
-                    鑑賞者の意識状態を空間に投影します。
-                </p>
-                <a href="work01.html" class="goto-btn">Go to page →</a>
-            </div>
-
-        </div>
-        <div class="project-wrapper">
-            
-            <div class="images-group">
-                <img src="https://placehold.co/600x400/e0e0e0/888888/png" class="floating-img img-main" alt="Main Art">
-                <img src="https://placehold.co/300x300/d0d0d0/777777/png" class="floating-img img-sub-1" alt="Sub Art 1">
-                <img src="https://placehold.co/200x200/c0c0c0/666666/png" class="floating-img img-sub-2" alt="Sub Art 2">
-            </div>
-
-            <div class="sticky-text-card">
-                <h3 class="work-title">Untitled Project</h3>
-                <p class="work-desc">Mixed Media, 2024</p>
-                <p style="font-size: 0.9rem; margin-bottom: 20px;">
-                    都市のゴミ袋をモチーフにした3DCG映像作品。<br>
-                    集積する記憶と忘却をテーマにしています。
-                </p>
-                <a href="#" class="goto-btn">Go to page →</a>
-            </div>
-
-        </div>
-
-        <div class="project-wrapper">
-             <div class="images-group">
-                <img src="https://placehold.co/600x400/d0d0d0/777777/png" class="floating-img img-main" alt="Main Art">
-                <img src="https://placehold.co/300x300/c0c0c0/666666/png" class="floating-img img-sub-1" alt="Sub Art 1">
-                <img src="https://placehold.co/200x200/b0b0b0/555555/png" class="floating-img img-sub-2" alt="Sub Art 2">
-            </div>
-
-            <div class="sticky-text-card">
-                <h3 class="work-title">Lighting Exp</h3>
-                <p class="work-desc">LED, Arduino, 2023</p>
-                <p style="font-size: 0.9rem; margin-bottom: 20px;">
-                    光の屈折と反射を利用した実験的な照明装置。<br>
-                    プロトタイピングの記録。
-                </p>
-                <a href="#" class="goto-btn">Go to page →</a>
-            </div>
-        </div>
-
-    </div>
-
-</body>
-</html>
+            width: 100%; height: 100%;
+            object-fit: cover; /* 画像を画面いっぱいに広げる */
+            opacity:
