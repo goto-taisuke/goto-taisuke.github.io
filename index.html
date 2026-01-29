@@ -154,7 +154,7 @@
         /* 右側の情報ボックス（スケッチの「Title info Goto page」部分） */
         .work-info-box {
             flex: 1; /* 情報エリアの比率(1) */
-            min-width: 200px; /* 最低でも300pxの幅を確保 */
+            min-width: 100px; /* 最低でも100pxの幅を確保 */
             /* glass-boxクラスのデザインを引き継いでいます */
         }
 
@@ -193,9 +193,9 @@
         .see-more-btn {
             background: var(--glass-bg); /* 背景をガラスに */
             border: 1px solid var(--glass-border);
-            padding: 15px 50px;
-            border-radius: 50px;
-            font-size: 1.2rem;
+            padding: 15px 40px;
+            border-radius: 40px;
+            font-size: 1rem;
             transition: 0.3s;
         }
 
@@ -204,12 +204,13 @@
             letter-spacing: 0.1em;
         }
 
-        /* ▼▼▼ スマホ対応（画面幅768px以下） ▼▼▼ */
-        @media (max-width: 768px) {
+        /* ▼▼▼ スマホ対応（画面幅900px以下） ▼▼▼ */
+        @media (max-width: 900px) {
             /* トップ画面の箱の位置調整 */
             .nav-box { top: 20px; left: 20px; width: 150px; }
             .title-box { bottom: 40px; right: 20px; width: 280px; }
             .title-box h1 { font-size: 2rem; }
+            .title-box h3 { font-size: 1.5rem; }
 
             /* 作品エリアを縦並びにする */
             .work-item {
@@ -266,8 +267,7 @@
                     2025
                 </p>
                 <p style="font-size: 0.9rem; margin-bottom: 20px;">
-                    目に見えない人間の脳活動のダイナミクスを<br>
-                    音と光を用いて実体化させるインスタレーション。
+                    脳波データをもとに脳内の情報伝達のつながりを予測、音と光の奔流として体感するインスタレーション
                 </p>
                 <a href="work01.html" class="goto-btn">Go to page →</a>
             </div>
