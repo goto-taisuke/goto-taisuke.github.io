@@ -4,51 +4,114 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Portfolio</title>
+    
     <style>
+        /* :root は変数定義のような場所。ここで色を一括管理できます */
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.4); /* カードの背景色（40%の白） */
+            --glass-border: rgba(255, 255, 255, 0.7); /* カードの枠線の色 */
+            --text-main: #555; /* 文字色（真っ黒よりグレーの方が上品） */
+        }
+
         body {
             margin: 0;
             padding: 0;
-            /* 背景：メッシュグラデーション風 */
-            background: radial-gradient(circle at 50% -20%, #a1c4fd 0%, #c2e9fb 100%),
-                        linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
-            background-blend-mode: multiply;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
+            height: 100vh; /* 画面の高さいっぱいに広げる */
+            width: 100vw;
+            display: flex; /* 中身を中央揃えにするための設定 */
+            justify-content: center; /* 水平方向の中央 */
+            align-items: center; /* 垂直方向の中央 */
+            font-family: 'Helvetica Neue', Arial, sans-serif; /* モダンなフォント指定 */
+            overflow: hidden; /* 余計なスクロールバーを出さない */
+
+            /* ▼▼▼ 背景のアニメーション設定 ▼▼▼ */
+            /* 4色を指定：白、薄いグレー、薄い青、白。これを混ぜます */
+            background: linear-gradient(-45deg, #ffffff, #eff6ff, #eef2f3, #ffffff);
+            
+            /* 背景サイズを画面の4倍(400%)にして、表示範囲をズラすことで動きを作ります */
+            background-size: 400% 400%;
+            
+            /* アニメーション実行：名前(gradientBG) 時間(15秒) カーブ(ease) ループ(infinite) */
+            animation: gradientBG 15s ease infinite;
         }
 
-        /* グラスモーフィズムのカード */
+        /* ▼▼▼ アニメーションの動きの定義（キーフレーム） ▼▼▼ */
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%; /* 開始位置 */
+            }
+            50% {
+                background-position: 100% 50%; /* 中間地点（対角線上に移動） */
+            }
+            100% {
+                background-position: 0% 50%; /* 最初に戻る */
+            }
+        }
+
+        /* ▼▼▼ グラスモーフィズムのカード ▼▼▼ */
         .glass-card {
-            width: 80%;
-            max-width: 600px;
-            padding: 40px;
+            width: 80%; /* スマホなどの幅 */
+            max-width: 600px; /* PCでの最大幅 */
+            padding: 60px 40px; /* 内側の余白：上下60px 左右40px */
             
-            /* ここがグラスモーフィズムの肝 */
-            background: rgba(255, 255, 255, 0.25); /* 半透明の白 */
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1); /* 柔らかい影 */
-            backdrop-filter: blur(8px); /* 背景をぼかす */
-            -webkit-backdrop-filter: blur(8px); /* Safari用 */
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.4); /* うっすら白い枠線 */
+            /* すりガラス表現の核となる部分 */
+            background: var(--glass-bg); /* 上で定義した変数を使用 */
+            /* 背景のぼかし処理（これがないとただの半透明） */
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px); /* Safari対応 */
             
-            color: #333;
+            /* 境界線と影で「浮遊感」と「ガラスの厚み」を出す */
+            border: 1px solid var(--glass-border);
+            border-radius: 24px; /* 角丸の大きさ */
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05); /* 非常に薄い影 */
+            
             text-align: center;
+            color: var(--text-main);
         }
 
+        /* 以下、文字のデザイン調整 */
         h1 {
-            font-weight: 300;
-            letter-spacing: 0.1em;
-            margin-bottom: 20px;
+            font-weight: 200; /* 細い文字にして洗練させる */
+            letter-spacing: 0.2em; /* 文字間隔を広げる */
+            margin-bottom: 24px;
+            font-size: 2rem;
         }
+
+        p {
+            font-weight: 300;
+            line-height: 1.6; /* 行間を少し広げて読みやすく */
+            letter-spacing: 0.05em;
+        }
+
+        /* ポートフォリオ用ボタン（装飾例） */
+        .btn {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 12px 30px;
+            border: 1px solid #aaa;
+            border-radius: 50px;
+            text-decoration: none;
+            color: #555;
+            transition: 0.3s; /* ホバー時の変化にかかる時間 */
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background: rgba(255,255,255, 0.8);
+            letter-spacing: 0.2em; /* ホバー時に文字間が広がる演出 */
+        }
+
     </style>
 </head>
 <body>
+
     <div class="glass-card">
         <h1>PORTFOLIO</h1>
         <p>Installation Art / Design</p>
-        <p style="font-size: 0.8em; margin-top: 30px; opacity: 0.7;">Coming Soon...</p>
+        <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 10px;">Tokyo, Japan</p>
+        
+        <a href="#" class="btn">View Works</a>
     </div>
+
 </body>
 </html>
