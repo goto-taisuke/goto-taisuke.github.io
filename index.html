@@ -115,4 +115,70 @@
 
         /* ▼文字情報のエリア▼ */
         .art-info {
-            padding: 2
+            padding: 20px; /* 画像の下の余白 */
+        }
+        
+        .art-title {
+            font-size: 1.1rem; /* 少し大きく */
+            margin: 0 0 10px 0; /* 下に10pxの隙間を作る */
+            font-weight: 400;   /* 文字の太さは普通 */
+        }
+
+        .art-desc {
+            font-size: 0.8rem; /* 少し小さく */
+            opacity: 0.7;      /* 透明度を下げて、少し薄く見せる（階層表現） */
+            margin: 0;
+        }
+
+        /* ▼▼▼ スマホ向けの特別設定（メディアクエリ） ▼▼▼ */
+        /* max-width: 600px → 画面幅が600px以下になったら以下のCSSを上書き適用する */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem; /* タイトルがデカすぎると改行されちゃうので小さくする */
+            }
+            .container {
+                padding: 20px; /* スマホは画面が狭いので余白を減らす */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <header>
+            <h1>PORTFOLIO</h1>
+            <p style="opacity: 0.6; letter-spacing: 0.1em;">Installation Artist / Tokyo</p>
+        </header>
+
+        <div class="gallery-grid">
+            
+            <a href="work01.html" class="art-card">
+                <img src="https://placehold.co/600x400/eeeeee/999999/png" alt="作品のサムネイル" class="art-image">
+                <div class="art-info">
+                    <h2 class="art-title">Brainwave Installation</h2>
+                    <p class="art-desc">EEG Data, Sound, 2025</p>
+                </div>
+            </a>
+
+            <a href="#" class="art-card">
+                <img src="https://placehold.co/600x400/e0e0e0/888888/png" alt="作品のサムネイル" class="art-image">
+                <div class="art-info">
+                    <h2 class="art-title">Untitled Project</h2>
+                    <p class="art-desc">Mixed Media, 2024</p>
+                </div>
+            </a>
+
+            <a href="#" class="art-card">
+                <img src="https://placehold.co/600x400/d0d0d0/777777/png" alt="作品のサムネイル" class="art-image">
+                <div class="art-info">
+                    <h2 class="art-title">Lighting Experiment</h2>
+                    <p class="art-desc">LED, Arduino, 2023</p>
+                </div>
+            </a>
+            
+            </div>
+    </div>
+
+</body>
+</html>
