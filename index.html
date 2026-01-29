@@ -5,17 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Portfolio</title>
     <style>
-        /* ▼▼▼ デザイン変数の定義（ダークモード・宇宙仕様） ▼▼▼ */
+        /* ▼▼▼ 基本設定（変数は前回と同じ） ▼▼▼ */
         :root {
-            /* ガラスの背景：白(255,255,255)をかなり薄く(0.1)して、黒背景に馴染ませる */
-            --glass-bg: rgba(255, 255, 255, 0.1); 
-            /* ガラスの枠線：少しだけ明るくして、エッジを立たせる */
-            --glass-border: rgba(255, 255, 255, 0.2);
-            /* 文字色：真っ白(#fff)に近いオフホワイト */
-            --text-main: #f0f0f0;
-            /* 背景色：宇宙っぽい深い黒〜ダークグレーのグラデーション */
-            --bg-gradient: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            
+            --glass-bg: rgba(255, 255, 255, 0.35); /* 少し白さを上げました */
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --text-main: #333;
             --font-base: 'Helvetica Neue', Arial, sans-serif;
         }
 
@@ -24,191 +18,211 @@
             padding: 0;
             font-family: var(--font-base);
             color: var(--text-main);
-            background: var(--bg-gradient);
-            /* 背景を固定して、スクロールしても宇宙が奥にある感じにする */
-            background-attachment: fixed; 
-            overflow-x: hidden; /* 横スクロール禁止 */
+            background: linear-gradient(-45deg, #fdfbfb, #ebedee, #fdfbfb, #e6dee9); /* 少し落ち着いた色味に */
+            background-size: 400% 400%;
+            animation: gradientBG 20s ease infinite;
         }
 
-        a { text-decoration: none; color: inherit; transition: 0.3s; }
-        a:hover { opacity: 0.7; }
+        @keyframes gradientBG { 
+            0% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; } 
+        }
 
-        /* ▼▼▼ ガラスボックスの共通デザイン（最適化済み） ▼▼▼ */
+        /* リンクの基本設定（下線を消す） */
+        a { text-decoration: none; color: inherit; }
+
+        /* ▼▼▼ 共通のガラスボックスのデザイン ▼▼▼ */
+        /* これをクラスとして使うことで、どこでも同じガラスの質感を再現できます */
         .glass-box {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            /* 背景のぼかし：これを強くするとすりガラス感が強まる */
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 20px;
-            /* 影：黒い影を落として、浮遊感を強調 */
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-            padding: 30px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 24px; /* 角丸の大きさ */
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+            padding: 40px; /* 箱の内側の余白（文字が端にくっつかないように） */
         }
 
-        /* ▼▼▼ 1. トップ画面（ヒーローセクション） ▼▼▼ */
+        /* ▼▼▼ 1枚目の画像：トップ画面エリア ▼▼▼ */
         .hero-section {
-            height: 100vh;
+            height: 100vh; /* 画面の高さいっぱいに広げる */
             width: 100%;
-            position: relative;
-            overflow: hidden;
-            display: flex; /* 中身の配置用 */
-            justify-content: center;
-            align-items: center;
+            position: relative; /* 子要素を自由に配置するための基準点にする */
+            overflow: hidden; /* はみ出した部分は隠す */
         }
 
-        /* --- 背景スライドショーの設定 --- */
-        .hero-slideshow {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0; /* 一番奥に配置 */
-        }
-
-        .slide-img {
-            position: absolute;
-            width: 100%; height: 100%;
-            object-fit: cover; /* 画像を画面いっぱいに広げる */
-            opacity: 0; /* 最初は隠しておく */
-            /* アニメーション：fadeAnimationを15秒かけて無限ループ */
-            animation: fadeAnimation 15s infinite;
-        }
-
-        /* 画像ごとのタイミングをずらす（重要） */
-        /* 合計時間が15秒で、画像が3枚の場合、5秒ずつずらす */
-        .slide-img:nth-child(1) { animation-delay: 0s; }
-        .slide-img:nth-child(2) { animation-delay: 5s; }
-        .slide-img:nth-child(3) { animation-delay: 10s; }
-
-        /* フェードアニメーションの動き定義 */
-        @keyframes fadeAnimation {
-            0% { opacity: 0; }
-            10% { opacity: 1; } /* ふわっと現れる */
-            33% { opacity: 1; } /* しばらく表示 */
-            43% { opacity: 0; } /* ふわっと消える */
-            100% { opacity: 0; }
-        }
-        /* --- スライドショー設定終了 --- */
-
-
-        /* 左上のナビゲーション */
+        /* 左上のナビゲーションボックス（スケッチ左上） */
         .nav-box {
-            position: absolute;
-            top: 40px; left: 40px; 
-            width: 180px; 
-            z-index: 10; /* 画像より手前 */
-        }
-        .nav-list { list-style: none; padding: 0; margin: 0; }
-        .nav-list li { margin-bottom: 12px; cursor: pointer; font-weight: 300; font-size: 0.9rem; }
-        .nav-list li:hover { letter-spacing: 0.1em; color: #fff; }
-
-        /* 右下のタイトル */
-        .title-box {
-            position: absolute;
-            bottom: 40px; right: 40px; 
-            width: auto; /* 文字数に合わせる */
-            padding: 30px 50px; /* 横長に見せるためのパディング */
-            text-align: right; 
-            z-index: 10;
-        }
-        .title-box h1 { font-size: 2.5rem; font-weight: 200; margin: 0; letter-spacing: 0.15em; }
-        .title-box p { margin-top: 10px; opacity: 0.8; font-size: 0.9rem; }
-
-
-        /* ▼▼▼ 2. 作品エリア（全画面画像スクロール） ▼▼▼ */
-        .works-container {
-            width: 100%;
+            position: absolute; /* 自由配置モード */
+            top: 50px;          /* 上から50px */
+            left: 50px;         /* 左から50px */
+            width: 200px;       /* 細めの幅 */
+            z-index: 10;        /* 重なり順を手前に */
         }
 
-        /* 各作品のラッパー */
-        .project-wrapper {
-            position: relative;
-            /* height: 150vh → 画面1.5個分の高さ。これを増やすと滞在時間が伸びる */
-            height: 150vh; 
-            width: 100%;
-            display: flex;
-            /* justify-content: flex-end → テキストを右端に寄せる（デフォルト） */
-            justify-content: flex-end; 
-            align-items: center; /* 垂直方向中央 */
+        .nav-list {
+            list-style: none; /* リストの・を消す */
+            padding: 0;
+            margin: 0;
         }
 
-        /* 偶数番目の作品はテキストを左端に寄せる */
-        .project-wrapper:nth-child(even) {
-            justify-content: flex-start;
+        .nav-list li {
+            margin-bottom: 15px; /* メニュー項目の間隔 */
+            font-size: 1.2rem;
+            font-weight: 300;
+            cursor: pointer;
+            transition: 0.3s;
         }
-
-        /* --- 背景の全画面画像 --- */
-        .bg-art-image {
-            position: sticky; /* スクロールに合わせて張り付く設定 */
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh; /* 画面の高さぴったり */
-            object-fit: cover; /* 比率を保ってトリミング */
-            z-index: 1; /* 一番奥 */
-            
-            /* 画像を少し暗くして文字を読みやすくするフィルター */
-            filter: brightness(0.7); 
-        }
-
-
-        /* --- 張り付くテキストボックス（コンパクト化） --- */
-        .sticky-text-card {
-            position: sticky; /* 画面に張り付く */
-            top: 50%; /* 画面の真ん中 */
-            transform: translateY(-50%); /* 真ん中補正 */
-            
-            z-index: 10; /* 画像より手前 */
-            width: 280px; /* 幅を小さく（ご要望対応） */
-            margin: 0 5vw; /* 画面端から5%の余白を空ける */
-            
-            /* ガラスデザインの上書き（より文字を見やすく） */
-            background: rgba(0, 0, 0, 0.4); /* 黒っぽい半透明にして白文字を目立たせる */
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 30px; /* 余白も少しコンパクトに */
-        }
-
-        .work-title { font-size: 1.5rem; font-weight: 400; margin: 0 0 15px 0; letter-spacing: 0.05em; }
-        .work-desc { font-size: 0.85rem; line-height: 1.8; margin-bottom: 25px; opacity: 0.9; }
         
-        .goto-btn { 
-            display: inline-block;
-            font-size: 0.8rem; 
-            border: 1px solid rgba(255,255,255,0.5); 
-            padding: 8px 20px; 
-            border-radius: 30px;
+        .nav-list li:hover {
+            letter-spacing: 0.1em; /* ホバー時に文字間を広げる演出 */
+            color: #000;
         }
-        .goto-btn:hover { background: #fff; color: #000; }
 
+        /* 右下のメインタイトルボックス（スケッチ右下） */
+        .title-box {
+            position: absolute; /* 自由配置モード */
+            bottom: 80px;       /* 下から80px */
+            right: 50px;        /* 右から50px */
+            width: 350px;       /* 少し広めの幅 */
+            text-align: right;  /* 中の文字を右寄せ */
+        }
 
-        /* ▼▼▼ スマホ対応（縦書きレイアウトへ変更） ▼▼▼ */
+        .title-box h1 {
+            font-size: 3rem;
+            font-weight: 200;
+            margin: 0 0 10px 0;
+            letter-spacing: 0.1em;
+        }
+
+        .title-box p {
+            font-size: 1rem;
+            opacity: 0.6;
+            margin: 0;
+        }
+
+        /* ▼▼▼ 2枚目の画像：スクロール後の作品エリア ▼▼▼ */
+        .works-section {
+            padding: 100px 50px; /* 上下の余白をたっぷり取る */
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 200;
+            margin-bottom: 80px;
+            opacity: 0.5;
+        }
+
+        /* 作品1つずつのレイアウト（スケッチ2枚目） */
+        .work-item {
+            display: flex; /* 横並びにする魔法 */
+            align-items: flex-end; /* 下揃えにする（スケッチの雰囲気に合わせる） */
+            justify-content: center; /* 中央寄せ */
+            margin-bottom: 150px; /* 次の作品までの距離 */
+            gap: 50px; /* 画像とボックスの間の隙間 */
+        }
+
+        /* 偶数番目の作品だけ左右反転させる（アクセント用） */
+        /* 不要ならこのブロックを削除してください */
+        .work-item:nth-child(even) {
+            flex-direction: row-reverse; /* 並び順を逆にする */
+        }
+
+        /* 左側のアートワーク画像 */
+        .work-image-container {
+            flex: 1.5; /* 画像エリアの比率を大きめ(1.5)にする */
+            max-width: 700px;
+        }
+
+        .work-image {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.5s ease;
+        }
+
+        /* ホバー時に画像が少し動く */
+        .work-item:hover .work-image {
+            transform: scale(1.02);
+        }
+
+        /* 右側の情報ボックス（スケッチの「Title info Goto page」部分） */
+        .work-info-box {
+            flex: 1; /* 情報エリアの比率(1) */
+            min-width: 300px; /* 最低でも300pxの幅を確保 */
+            /* glass-boxクラスのデザインを引き継いでいます */
+        }
+
+        .work-title {
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin-bottom: 15px;
+        }
+
+        .work-desc {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .goto-btn {
+            display: inline-block;
+            border-bottom: 1px solid #333; /* 下線だけのシンプルなボタン */
+            padding-bottom: 5px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .goto-btn:hover {
+            opacity: 0.6;
+            padding-bottom: 8px; /* ホバー時に線が少し離れる動き */
+        }
+
+        /* ▼▼▼ 最下部の「See More」ボタン ▼▼▼ */
+        .footer-link {
+            text-align: center;
+            padding: 50px 0 100px 0;
+        }
+        
+        .see-more-btn {
+            background: var(--glass-bg); /* 背景をガラスに */
+            border: 1px solid var(--glass-border);
+            padding: 15px 50px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+
+        .see-more-btn:hover {
+            background: #fff;
+            letter-spacing: 0.1em;
+        }
+
+        /* ▼▼▼ スマホ対応（画面幅768px以下） ▼▼▼ */
         @media (max-width: 768px) {
-            .hero-section .nav-box { top: 20px; left: 20px; width: 140px; padding: 20px;}
-            .hero-section .title-box { bottom: 80px; right: 20px; padding: 20px 30px; }
-            .hero-section .title-box h1 { font-size: 1.8rem; }
+            /* トップ画面の箱の位置調整 */
+            .nav-box { top: 20px; left: 20px; width: 150px; }
+            .title-box { bottom: 40px; right: 20px; width: 280px; }
+            .title-box h1 { font-size: 2rem; }
 
-            .project-wrapper {
-                height: auto; /* 全画面スクロールを解除 */
-                display: block; /* 普通の縦並びブロックに */
-                margin-bottom: 0;
+            /* 作品エリアを縦並びにする */
+            .work-item {
+                flex-direction: column; /* 横並びから縦並びに変更 */
+                align-items: center; /* 中央揃え */
+                gap: 20px;
             }
-            .project-wrapper:nth-child(even) { display: block; }
-
-            /* 画像の設定変更 */
-            .bg-art-image {
-                position: relative; /* 張り付き解除 */
-                height: 60vh; /* スマホなら画面の60%くらいの高さ */
-                filter: brightness(1.0); /* 暗くしない */
+            .work-item:nth-child(even) {
+                flex-direction: column; /* 偶数の反転も解除して縦並びに */
             }
-
-            /* テキストボックスの設定変更 */
-            .sticky-text-card {
-                position: relative; /* 張り付き解除 */
-                top: 0; 
-                transform: none;
-                width: auto; /* 幅制限解除 */
-                margin: -40px 20px 60px 20px; /* 画像に少しかぶせる */
-                background: rgba(20, 20, 20, 0.85); /* 読みやすさ重視で濃くする */
+            .work-image-container, .work-info-box {
+                width: 100%; /* 幅を画面いっぱいに */
+                flex: none; /* 比率設定を解除 */
             }
         }
     </style>
@@ -217,79 +231,81 @@
 
     <section class="hero-section">
         
-        <div class="hero-slideshow">
-            <img src="Additional Image 5.png" class="slide-img" alt="Hero 1">
-            <img src="https://placehold.co/1920x1080/2b2b2b/ffffff/png?text=Art+Image+2" class="slide-img" alt="Hero 2">
-            <img src="https://placehold.co/1920x1080/0d0d0d/ffffff/png?text=Art+Image+3" class="slide-img" alt="Hero 3">
-        </div>
-
         <nav class="glass-box nav-box">
             <ul class="nav-list">
                 <li><a href="#works">Artwork</a></li>
                 <li><a href="#">Bio / CV</a></li>
                 <li><a href="#">Contact</a></li>
-                <li style="margin-top:15px; opacity:0.5; font-size:0.8rem;">JP / EN</li>
+                <li style="margin-top:20px; font-size:0.9rem; opacity:0.5;">JP / EN</li>
             </ul>
         </nav>
 
         <div class="glass-box title-box">
             <h1>PORTFOLIO</h1>
             <p>Installation Art / Design</p>
+            <p style="margin-top: 20px;">Tokyo, Japan</p>
         </div>
+
     </section>
 
 
-    <div id="works" class="works-container">
+    <section id="works" class="works-section">
         
-        <div class="project-wrapper">
-            <img src="https://placehold.co/1920x1080/333333/999999/png?text=Brainwave+Art" class="bg-art-image" alt="Work 1">
+        <h2 class="section-title">Latest Works</h2>
 
-            <div class="glass-box sticky-text-card">
+        <div class="work-item">
+            <div class="work-image-container">
+                <img src="https://placehold.co/800x500/eeeeee/999999/png" alt="作品画像" class="work-image">
+            </div>
+            <div class="glass-box work-info-box">
                 <h3 class="work-title">Brainwave Install</h3>
                 <p class="work-desc">
                     EEG Sensor, Unreal Engine 5<br>
                     2025
                 </p>
-                <p class="work-desc">
-                    脳波をリアルタイム解析し、<br>
-                    音と光へ変換する空間芸術。<br>
-                    意識の揺らぎを可視化する。
+                <p style="font-size: 0.9rem; margin-bottom: 20px;">
+                    脳波を用いたインタラクティブな空間演出。<br>
+                    鑑賞者の意識状態を可視化する。
                 </p>
-                <a href="work01.html" class="goto-btn">View Details →</a>
+                <a href="work01.html" class="goto-btn">Go to page →</a>
             </div>
         </div>
 
-        <div class="project-wrapper">
-            <img src="https://placehold.co/1920x1080/444444/aaaaaa/png?text=Urban+Decay" class="bg-art-image" alt="Work 2">
-
-            <div class="glass-box sticky-text-card">
+        <div class="work-item">
+            <div class="work-image-container">
+                <img src="https://placehold.co/800x500/e0e0e0/888888/png" alt="作品画像" class="work-image">
+            </div>
+            <div class="glass-box work-info-box">
                 <h3 class="work-title">Untitled Project</h3>
                 <p class="work-desc">Mixed Media, 2024</p>
-                <p class="work-desc">
+                <p style="font-size: 0.9rem; margin-bottom: 20px;">
                     都市のゴミ袋をモチーフにした<br>
-                    3DCG映像作品。<br>
-                    集積する記憶と忘却。
+                    3DCG映像作品。
                 </p>
-                <a href="#" class="goto-btn">View Details →</a>
+                <a href="#" class="goto-btn">Go to page →</a>
             </div>
         </div>
 
-        <div class="project-wrapper">
-            <img src="https://placehold.co/1920x1080/222222/888888/png?text=Light+Exp" class="bg-art-image" alt="Work 3">
-
-            <div class="glass-box sticky-text-card">
+        <div class="work-item">
+            <div class="work-image-container">
+                <img src="https://placehold.co/800x500/d0d0d0/777777/png" alt="作品画像" class="work-image">
+            </div>
+            <div class="glass-box work-info-box">
                 <h3 class="work-title">Lighting Exp</h3>
                 <p class="work-desc">LED, Arduino, 2023</p>
-                <p class="work-desc">
+                <p style="font-size: 0.9rem; margin-bottom: 20px;">
                     光の屈折と反射を利用した<br>
-                    実験的な照明装置。<br>
-                    プロトタイピングの記録。
+                    実験的な照明装置。
                 </p>
-                <a href="#" class="goto-btn">View Details →</a>
+                <a href="#" class="goto-btn">Go to page →</a>
             </div>
         </div>
 
-    </div>
+        <div class="footer-link">
+            <a href="#" class="see-more-btn">See more works</a>
+        </div>
+
+    </section>
 
 </body>
 </html>
