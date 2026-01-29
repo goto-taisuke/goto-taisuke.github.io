@@ -66,7 +66,7 @@
             width: 400px; text-align: right;
         }
         .title-box h1 { font-size: 3rem; font-weight: 200; margin: 0 0 10px 0; letter-spacing: 0.1em; }
-        .title-box h3 { font-size: 2rem; font-weight: 200; margin: 0 0 10px 0; letter-spacing: 0.1em; }
+        .title-box h1 { font-size: 2rem; font-weight: 200; margin: 0 0 10px 0; letter-spacing: 0.1em; }
         .title-box p { font-size: 1rem; opacity: 0.6; margin: 0; }
 
 
@@ -133,4 +133,131 @@
         .goto-btn { display: inline-block; border-bottom: 1px solid #333; padding-bottom: 5px; font-size: 0.9rem; transition: 0.3s; }
         .goto-btn:hover { opacity: 0.6; padding-bottom: 8px; }
 
-        .footer-link { text-align: center; padding: 50px 0 70
+        .footer-link { text-align: center; padding: 50px 0 70px 0; }
+        .see-more-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 15px 40px; border-radius: 40px; font-size: 1rem; transition: 0.3s; }
+        .see-more-btn:hover { background: #fff; letter-spacing: 0.1em; }
+
+
+        /* ▼▼▼ スマホ対応（修正箇所） ▼▼▼ */
+        @media (max-width: 900px) {
+            /* トップ画面の調整 */
+            .nav-box { top: 20px; left: 20px; width: 150px; }
+            .title-box { bottom: 40px; right: 20px; width: 280px; }
+            .title-box h1 { font-size: 2rem; }
+            .title-box h3 { font-size: 1.5rem; }
+
+            /* Worksセクションの調整 */
+            .works-section {
+                /* スマホでは左右の余白を20pxにして画面を広く使う */
+                padding: 80px 20px; 
+            }
+
+            .work-item {
+                flex-direction: column; /* 縦並び */
+                align-items: stretch; /* 幅いっぱいに広げる */
+                gap: 20px;
+                margin-bottom: 100px;
+            }
+            
+            .work-item:nth-child(even) {
+                flex-direction: column; /* 偶数の反転も解除 */
+            }
+
+            /* 画像と説明の幅を完全に揃える */
+            .work-image-container {
+                width: 100%;
+                flex: none; /* Flex比率を無効化 */
+            }
+
+            .work-info-box {
+                width: 100%;
+                flex: none; /* Flex比率を無効化 */
+                min-width: 0; /* デスクトップ用の設定をリセット */
+                box-sizing: border-box; /* パディングを含めて100%にする */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero-section">
+        
+        <nav class="glass-box nav-box">
+            <ul class="nav-list">
+                <li><a href="#">News </a></li>
+                <li><a href="#works">Artwork</a></li>
+                <li><a href="#">Biography</a></li>
+                <li><a href="#">Contact</a></li>
+                <li style="margin-top:20px; font-size:0.9rem; opacity:0.5;">JP / EN</li>
+            </ul>
+        </nav>
+
+        <div class="glass-box title-box">
+            <h1>Portfolio</h1>
+            <h3>Taisuke Goto / 後藤泰輔</h3>
+            <p>Art / Design</p>
+            <p style="margin-top: 20px;">Kanagawa, Japan</p>
+        </div>
+
+    </section>
+
+
+    <section id="works" class="works-section">
+        
+        <h2 class="section-title">Latest Works</h2>
+
+        <div class="work-item">
+            <div class="work-image-container">
+                <img src="Additional Image 5.png" alt="作品画像" class="work-image">
+            </div>
+            <div class="glass-box work-info-box">
+                <h3 class="work-title">Suspended Second</h3>
+                <p class="work-desc">
+                    3Dプリントパーツ, テープLED, 脳波データ<br>
+                    2025
+                </p>
+                <p style="font-size: 0.9rem; margin-bottom: 20px;">
+                    脳内の情報伝達の繋がりを、音と光として体感するインスタレーション
+                </p>
+                <a href="work01.html" class="goto-btn">Go to page →</a>
+            </div>
+        </div>
+
+        <div class="work-item">
+            <div class="work-image-container">
+                <img src="https://placehold.co/800x500/e0e0e0/888888/png" alt="作品画像" class="work-image">
+            </div>
+            <div class="glass-box work-info-box">
+                <h3 class="work-title">Untitled Project</h3>
+                <p class="work-desc">Mixed Media, 2024</p>
+                <p style="font-size: 0.9rem; margin-bottom: 20px;">
+                    都市のゴミ袋をモチーフにした<br>
+                    3DCG映像作品。
+                </p>
+                <a href="#" class="goto-btn">Go to page →</a>
+            </div>
+        </div>
+
+        <div class="work-item">
+            <div class="work-image-container">
+                <img src="https://placehold.co/800x500/d0d0d0/777777/png" alt="作品画像" class="work-image">
+            </div>
+            <div class="glass-box work-info-box">
+                <h3 class="work-title">Lighting Exp</h3>
+                <p class="work-desc">LED, Arduino, 2023</p>
+                <p style="font-size: 0.9rem; margin-bottom: 20px;">
+                    光の屈折と反射を利用した<br>
+                    実験的な照明装置。
+                </p>
+                <a href="#" class="goto-btn">Go to page →</a>
+            </div>
+        </div>
+
+        <div class="footer-link">
+            <a href="#" class="see-more-btn">See more works</a>
+        </div>
+
+    </section>
+
+</body>
+</html>
