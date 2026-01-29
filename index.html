@@ -221,8 +221,13 @@
             .work-item:nth-child(even) {
                 flex-direction: column; /* 偶数の反転も解除して縦並びに */
             }
-            .work-image-container, .work-info-box {
+            .work-image-container {
                 width: 120%; /* 幅を画面いっぱいに */
+                flex: none; /* 比率設定を解除 */
+            }
+
+            .work-info-box {
+                width: 100%; /* 幅を画面いっぱいに */
                 flex: none; /* 比率設定を解除 */
             }
         }
