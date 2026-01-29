@@ -2,160 +2,117 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>My Portfolio</title>
+    
     <style>
+        /* ▼▼▼ CSS変数（プログラミングの変数定義と同じ） ▼▼▼ */
+        /* ここで色を一括管理しておくと、後で「:root」の中を変えるだけで全箇所の修正ができます */
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.25);
-            --glass-border: rgba(255, 255, 255, 0.4);
-            --text-main: #333;
+            --glass-bg: rgba(255, 255, 255, 0.25); /* ガラスの背景色（白の透明度25%） */
+            --glass-border: rgba(255, 255, 255, 0.4); /* ガラスの枠線の色 */
+            --text-main: #333; /* メインの文字色（真っ黒#000より少しグレーが目に優しい） */
+            --font-base: 'Helvetica Neue', Arial, sans-serif; /* フォントの種類 */
         }
 
+        /* ▼▼▼ body: 画面全体の初期設定 ▼▼▼ */
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            color: var(--text-main);
+            margin: 0;   /* 画面の端にある余計な空白を削除 */
+            padding: 0;  /* 内側の余白もリセット */
+            font-family: var(--font-base); /* 上で定義した変数(--font-base)を使う */
+            color: var(--text-main);       /* 文字色を適用 */
             
-            /* ▼▼▼ スクロール対応の変更点 ▼▼▼ */
-            /* height: 100vh; を削除し、min-height に変更 */
-            /* これにより「最低でも画面いっぱい、中身が増えれば伸びる」ようになります */
+            /* ▼スクロール対応の重要ポイント▼ */
+            /* min-height: 最低でも画面の高さ(100vh)を確保する。 */
+            /* 中身が増えれば自動的に伸びてスクロールできるようになる */
             min-height: 100vh;
             
-            /* 背景アニメーション（前回のまま） */
+            /* ▼背景アニメーションの設定▼ */
+            /* グラデーション作成: 左上(-45deg)に向かって4色を配置 */
             background: linear-gradient(-45deg, #ffffff, #e0eafc, #cfdef3, #ffffff);
+            /* background-size: 画面の4倍(400%)の大きさで描画（これを動かすことで変化をつける） */
             background-size: 400% 400%;
+            /* アニメーション実行: gradientBGという動きを、20秒かけて、滑らかに(ease)、無限に(infinite)繰り返す */
             animation: gradientBG 20s ease infinite;
         }
 
+        /* ▼▼▼ アニメーションの動きの定義（キーフレーム） ▼▼▼ */
+        /* UEのタイムラインのようなもの。0%→50%→100%の時間経過で値を変化させる */
         @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% { background-position: 0% 50%; }   /* 開始位置 */
+            50% { background-position: 100% 50%; } /* 中間地点（対角線上に移動） */
+            100% { background-position: 0% 50%; }  /* 最初に戻る */
         }
 
-        /* サイト全体のレイアウト枠 */
+        /* ▼▼▼ .container: サイトの中身を入れる「箱」 ▼▼▼ */
         .container {
-            max-width: 1000px; /* PCでの最大幅 */
-            margin: 0 auto; /* 中央揃え */
-            padding: 40px 20px; /* 上下の余白と左右の余白 */
+            max-width: 1000px; /* PCで見ても横幅が広がりすぎないように制限(1000pxまで) */
+            margin: 0 auto;    /* 左右の余白をautoにすることで「中央揃え」にする */
+            padding: 40px 20px; /* 上下の余白40px、左右の余白20px */
         }
 
-        /* ヘッダー（名前などの部分） */
+        /* ▼▼▼ ヘッダー（タイトル部分）のデザイン ▼▼▼ */
         header {
-            text-align: center;
-            margin-bottom: 60px;
-            padding: 40px 0;
+            text-align: center; /* 文字を真ん中に寄せる */
+            margin-bottom: 60px; /* 下の要素（画像一覧）との距離を60px空ける */
+            padding: 40px 0;    /* ヘッダー自体の内側の余白 */
         }
         
         h1 {
-            font-weight: 200;
-            letter-spacing: 0.2em;
-            font-size: 2.5rem;
-            margin: 0;
+            font-weight: 200;    /* 文字の太さ。200はかなり細め（洗練された印象に） */
+            letter-spacing: 0.2em; /* 文字の間隔。0.2文字分空ける */
+            font-size: 2.5rem;   /* 文字サイズ。基本サイズの2.5倍 */
+            margin: 0;           /* 余計な空白を消す */
         }
 
-        /* ▼▼▼ 作品一覧のグリッドレイアウト（PC/スマホ切り替えの肝） ▼▼▼ */
+        /* ▼▼▼ .gallery-grid: 画像を並べるための「グリッドシステム」 ▼▼▼ */
+        /* ここがPC/スマホのレイアウト切り替えの心臓部です */
         .gallery-grid {
-            display: grid;
-            /* 「リピートして埋める」設定。250px以上の幅で自動的に列を作る */
+            display: grid; /* グリッドレイアウトモードをON */
+            
+            /* ■魔法の呪文解説■ */
+            /* repeat(auto-fit, ...): 親の幅に合わせて入るだけ詰め込む */
+            /* minmax(250px, 1fr): 「最低250pxは確保する。余裕があれば1fr(比率)で広げる」 */
+            /* → つまり、画面が広いPCなら3列、狭いスマホなら自動で1列になります */
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px; /* 画像同士の隙間 */
+            
+            gap: 30px; /* カードとカードの間の隙間を30px空ける */
         }
 
-        /* 作品カードのデザイン（ここもグラスモーフィズム） */
+        /* ▼▼▼ .art-card: 個々の作品カード（グラスモーフィズム） ▼▼▼ */
         .art-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            overflow: hidden; /* 角丸からはみ出た画像をカット */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            transition: transform 0.3s ease; /* ホバー時の動きを滑らかに */
-            text-decoration: none; /* リンクの下線を消す */
-            color: inherit; /* 文字色を親に合わせる */
-            display: block; /* リンクをブロック要素にする */
+            display: block;        /* リンク(aタグ)だけど箱として扱う */
+            text-decoration: none; /* リンクの下線（アンダーライン）を消す */
+            color: inherit;        /* 文字色は親の設定を引き継ぐ */
+            
+            /* グラスモーフィズム処理 */
+            background: var(--glass-bg); /* 背景色（半透明） */
+            border: 1px solid var(--glass-border); /* 枠線 */
+            backdrop-filter: blur(10px); /* ★重要: 背景にあるものを10pxぼかす */
+            -webkit-backdrop-filter: blur(10px); /* Safari用のおまじない */
+            
+            border-radius: 16px; /* 角を丸くする */
+            overflow: hidden;    /* 丸めた角からはみ出した画像などを切り取る */
+            
+            transition: transform 0.3s ease; /* 動き（変形）にかかる時間を0.3秒にする */
         }
 
-        /* マウスを乗せた時にふわっと浮く演出 */
+        /* ▼ホバー時（マウスが乗った時）の挙動▼ */
         .art-card:hover {
-            transform: translateY(-10px); /* 上に10px移動 */
-            background: rgba(255, 255, 255, 0.4); /* 白さを強める */
+            transform: translateY(-10px); /* Y軸方向にマイナス10px（上に）移動させる */
+            background: rgba(255, 255, 255, 0.4); /* 背景の白さを少し濃くして「反応」させる */
         }
 
-        /* 画像の設定 */
+        /* ▼画像のスタイル▼ */
         .art-image {
-            width: 100%; /* 横幅いっぱいに */
-            height: 200px; /* 高さを固定 */
-            object-fit: cover; /* 比率を保ったままトリミングして埋める */
-            background-color: #ddd; /* 画像がない時のグレー背景 */
+            width: 100%;       /* 親（カード）の幅いっぱいに広げる */
+            height: 200px;     /* 高さは200pxに固定 */
+            object-fit: cover; /* 重要: 画像の比率を保ったまま、枠を埋めるようにトリミングする */
+            background-color: #ddd; /* 画像読み込み前に表示されるグレーの背景 */
         }
 
+        /* ▼文字情報のエリア▼ */
         .art-info {
-            padding: 20px;
-        }
-        
-        .art-title {
-            font-size: 1.1rem;
-            margin: 0 0 10px 0;
-            font-weight: 400;
-        }
-
-        .art-desc {
-            font-size: 0.8rem;
-            opacity: 0.7;
-            margin: 0;
-        }
-
-        /* ▼▼▼ スマホ向けの調整（メディアクエリ） ▼▼▼ */
-        /* 画面幅が600px以下（スマホ）の時だけ適用されるCSS */
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 1.8rem; /* タイトルを少し小さく */
-            }
-            .container {
-                padding: 20px; /* 余白を狭く */
-            }
-            /* グリッドは auto-fit の設定により、自動的に1列になります */
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <header>
-            <h1>PORTFOLIO</h1>
-            <p style="opacity: 0.6; letter-spacing: 0.1em;">Installation Artist / Tokyo</p>
-        </header>
-
-        <div class="gallery-grid">
-            
-            <a href="work01.html" class="art-card">
-                <img src="https://placehold.co/600x400/eeeeee/999999/png" alt="作品名" class="art-image">
-                <div class="art-info">
-                    <h2 class="art-title">Brainwave Installation</h2>
-                    <p class="art-desc">EEG Data, Sound, 2025</p>
-                </div>
-            </a>
-
-            <a href="#" class="art-card">
-                <img src="https://placehold.co/600x400/e0e0e0/888888/png" alt="作品名" class="art-image">
-                <div class="art-info">
-                    <h2 class="art-title">Untitled Project</h2>
-                    <p class="art-desc">Mixed Media, 2024</p>
-                </div>
-            </a>
-
-            <a href="#" class="art-card">
-                <img src="https://placehold.co/600x400/d0d0d0/777777/png" alt="作品名" class="art-image">
-                <div class="art-info">
-                    <h2 class="art-title">Lighting Experiment</h2>
-                    <p class="art-desc">LED, Arduino, 2023</p>
-                </div>
-            </a>
-            
-            </div>
-    </div>
-
-</body>
-</html>
+            padding: 2
