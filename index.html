@@ -4,113 +4,157 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Portfolio</title>
-    
     <style>
-        /* :root は変数定義のような場所。ここで色を一括管理できます */
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.4); /* カードの背景色（40%の白） */
-            --glass-border: rgba(255, 255, 255, 0.7); /* カードの枠線の色 */
-            --text-main: #555; /* 文字色（真っ黒よりグレーの方が上品） */
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --text-main: #333;
         }
 
         body {
             margin: 0;
             padding: 0;
-            height: 100vh; /* 画面の高さいっぱいに広げる */
-            width: 100vw;
-            display: flex; /* 中身を中央揃えにするための設定 */
-            justify-content: center; /* 水平方向の中央 */
-            align-items: center; /* 垂直方向の中央 */
-            font-family: 'Helvetica Neue', Arial, sans-serif; /* モダンなフォント指定 */
-            overflow: hidden; /* 余計なスクロールバーを出さない */
-
-            /* ▼▼▼ 背景のアニメーション設定 ▼▼▼ */
-            /* 4色を指定：白、薄いグレー、薄い青、白。これを混ぜます */
-            background: linear-gradient(-45deg, #ffffff, #eff6ff, #eef2f3, #ffffff);
-            
-            /* 背景サイズを画面の4倍(400%)にして、表示範囲をズラすことで動きを作ります */
-            background-size: 400% 400%;
-            
-            /* アニメーション実行：名前(gradientBG) 時間(15秒) カーブ(ease) ループ(infinite) */
-            animation: gradientBG 15s ease infinite;
-        }
-
-        /* ▼▼▼ アニメーションの動きの定義（キーフレーム） ▼▼▼ */
-        @keyframes gradientBG {
-            0% {
-                background-position: 0% 50%; /* 開始位置 */
-            }
-            50% {
-                background-position: 100% 50%; /* 中間地点（対角線上に移動） */
-            }
-            100% {
-                background-position: 0% 50%; /* 最初に戻る */
-            }
-        }
-
-        /* ▼▼▼ グラスモーフィズムのカード ▼▼▼ */
-        .glass-card {
-            width: 80%; /* スマホなどの幅 */
-            max-width: 600px; /* PCでの最大幅 */
-            padding: 60px 40px; /* 内側の余白：上下60px 左右40px */
-            
-            /* すりガラス表現の核となる部分 */
-            background: var(--glass-bg); /* 上で定義した変数を使用 */
-            /* 背景のぼかし処理（これがないとただの半透明） */
-            backdrop-filter: blur(12px); 
-            -webkit-backdrop-filter: blur(12px); /* Safari対応 */
-            
-            /* 境界線と影で「浮遊感」と「ガラスの厚み」を出す */
-            border: 1px solid var(--glass-border);
-            border-radius: 24px; /* 角丸の大きさ */
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05); /* 非常に薄い影 */
-            
-            text-align: center;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
             color: var(--text-main);
+            
+            /* ▼▼▼ スクロール対応の変更点 ▼▼▼ */
+            /* height: 100vh; を削除し、min-height に変更 */
+            /* これにより「最低でも画面いっぱい、中身が増えれば伸びる」ようになります */
+            min-height: 100vh;
+            
+            /* 背景アニメーション（前回のまま） */
+            background: linear-gradient(-45deg, #ffffff, #e0eafc, #cfdef3, #ffffff);
+            background-size: 400% 400%;
+            animation: gradientBG 20s ease infinite;
         }
 
-        /* 以下、文字のデザイン調整 */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* サイト全体のレイアウト枠 */
+        .container {
+            max-width: 1000px; /* PCでの最大幅 */
+            margin: 0 auto; /* 中央揃え */
+            padding: 40px 20px; /* 上下の余白と左右の余白 */
+        }
+
+        /* ヘッダー（名前などの部分） */
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 0;
+        }
+        
         h1 {
-            font-weight: 200; /* 細い文字にして洗練させる */
-            letter-spacing: 0.2em; /* 文字間隔を広げる */
-            margin-bottom: 24px;
-            font-size: 2rem;
+            font-weight: 200;
+            letter-spacing: 0.2em;
+            font-size: 2.5rem;
+            margin: 0;
         }
 
-        p {
-            font-weight: 300;
-            line-height: 1.6; /* 行間を少し広げて読みやすく */
-            letter-spacing: 0.05em;
+        /* ▼▼▼ 作品一覧のグリッドレイアウト（PC/スマホ切り替えの肝） ▼▼▼ */
+        .gallery-grid {
+            display: grid;
+            /* 「リピートして埋める」設定。250px以上の幅で自動的に列を作る */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px; /* 画像同士の隙間 */
         }
 
-        /* ポートフォリオ用ボタン（装飾例） */
-        .btn {
-            display: inline-block;
-            margin-top: 40px;
-            padding: 12px 30px;
-            border: 1px solid #aaa;
-            border-radius: 50px;
-            text-decoration: none;
-            color: #555;
-            transition: 0.3s; /* ホバー時の変化にかかる時間 */
-            font-size: 0.9rem;
+        /* 作品カードのデザイン（ここもグラスモーフィズム） */
+        .art-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            overflow: hidden; /* 角丸からはみ出た画像をカット */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: transform 0.3s ease; /* ホバー時の動きを滑らかに */
+            text-decoration: none; /* リンクの下線を消す */
+            color: inherit; /* 文字色を親に合わせる */
+            display: block; /* リンクをブロック要素にする */
         }
 
-        .btn:hover {
-            background: rgba(255,255,255, 0.8);
-            letter-spacing: 0.2em; /* ホバー時に文字間が広がる演出 */
+        /* マウスを乗せた時にふわっと浮く演出 */
+        .art-card:hover {
+            transform: translateY(-10px); /* 上に10px移動 */
+            background: rgba(255, 255, 255, 0.4); /* 白さを強める */
         }
 
+        /* 画像の設定 */
+        .art-image {
+            width: 100%; /* 横幅いっぱいに */
+            height: 200px; /* 高さを固定 */
+            object-fit: cover; /* 比率を保ったままトリミングして埋める */
+            background-color: #ddd; /* 画像がない時のグレー背景 */
+        }
+
+        .art-info {
+            padding: 20px;
+        }
+        
+        .art-title {
+            font-size: 1.1rem;
+            margin: 0 0 10px 0;
+            font-weight: 400;
+        }
+
+        .art-desc {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin: 0;
+        }
+
+        /* ▼▼▼ スマホ向けの調整（メディアクエリ） ▼▼▼ */
+        /* 画面幅が600px以下（スマホ）の時だけ適用されるCSS */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem; /* タイトルを少し小さく */
+            }
+            .container {
+                padding: 20px; /* 余白を狭く */
+            }
+            /* グリッドは auto-fit の設定により、自動的に1列になります */
+        }
     </style>
 </head>
 <body>
 
-    <div class="glass-card">
-        <h1>PORTFOLIO</h1>
-        <p>Installation Art / Design</p>
-        <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 10px;">Tokyo, Japan</p>
-        
-        <a href="#" class="btn">View Works</a>
+    <div class="container">
+        <header>
+            <h1>PORTFOLIO</h1>
+            <p style="opacity: 0.6; letter-spacing: 0.1em;">Installation Artist / Tokyo</p>
+        </header>
+
+        <div class="gallery-grid">
+            
+            <a href="work01.html" class="art-card">
+                <img src="https://placehold.co/600x400/eeeeee/999999/png" alt="作品名" class="art-image">
+                <div class="art-info">
+                    <h2 class="art-title">Brainwave Installation</h2>
+                    <p class="art-desc">EEG Data, Sound, 2025</p>
+                </div>
+            </a>
+
+            <a href="#" class="art-card">
+                <img src="https://placehold.co/600x400/e0e0e0/888888/png" alt="作品名" class="art-image">
+                <div class="art-info">
+                    <h2 class="art-title">Untitled Project</h2>
+                    <p class="art-desc">Mixed Media, 2024</p>
+                </div>
+            </a>
+
+            <a href="#" class="art-card">
+                <img src="https://placehold.co/600x400/d0d0d0/777777/png" alt="作品名" class="art-image">
+                <div class="art-info">
+                    <h2 class="art-title">Lighting Experiment</h2>
+                    <p class="art-desc">LED, Arduino, 2023</p>
+                </div>
+            </a>
+            
+            </div>
     </div>
 
 </body>
