@@ -3,114 +3,324 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work 01 - My Portfolio</title>
-    
+    <title>Suspended Second - Portfolio</title>
     <style>
-        /* ▼▼▼ ページ全体の共通設定 ▼▼▼ */
-        body {
-            margin: 0;
-            padding: 40px 20px; /* 上下に40px、左右に20pxの余白を入れる（スマホで端っこすぎないように） */
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            color: #333;
-            
-            /* 背景設定（index.htmlと同じ動き） */
-            min-height: 100vh; /* 内容が少なくても画面いっぱいに背景を表示 */
-            background: linear-gradient(-45deg, #ffffff, #e0eafc, #cfdef3, #ffffff);
-            background-size: 400% 400%;
-            animation: gradientBG 20s ease infinite;
+        /* ▼▼▼ 基本設定（トップページと統一） ▼▼▼ */
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.7);
+            --text-main: #333;
+            --font-base: 'Helvetica Neue', Arial, sans-serif;
+            /* アクセントカラー（選択中の枠線など） */
+            --accent-color: #555;
         }
 
-        /* 背景アニメーションの動き定義 */
+        body {
+            margin: 0; padding: 0;
+            font-family: var(--font-base);
+            color: var(--text-main);
+            background: linear-gradient(-45deg, #fdfbfb, #ebedee, #fdfbfb, #e6dee9);
+            background-size: 400% 400%;
+            animation: gradientBG 20s ease infinite;
+            min-height: 100vh;
+        }
+
         @keyframes gradientBG { 
             0% { background-position: 0% 50%; } 
             50% { background-position: 100% 50%; } 
             100% { background-position: 0% 50%; } 
         }
 
-        /* ▼▼▼ 作品情報を入れるメインの白い箱 ▼▼▼ */
-        .container { 
-            max-width: 800px; /* 文字が横に長すぎると読みづらいので、最大幅を800pxに制限 */
-            margin: 0 auto;   /* 画面中央に配置する（左右の余白を自動調整） */
+        a { text-decoration: none; color: inherit; }
+
+        /* ▼▼▼ 全体のレイアウト（PC: 左右分割） ▼▼▼ */
+        .detail-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
             
-            /* グラスモーフィズム（すりガラス）の設定 */
-            background: rgba(255, 255, 255, 0.4); /* 背景色：白の40%透明 */
-            backdrop-filter: blur(10px);          /* 背景をぼかす */
-            -webkit-backdrop-filter: blur(10px);  /* Safari用 */
-            
-            padding: 40px;      /* 箱の内側の余白 */
-            border-radius: 20px; /* 角を丸くする */
-            border: 1px solid rgba(255, 255, 255, 0.6); /* うっすら白い枠線 */
+            /* グリッドで左右に分ける */
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* 左2 : 右1 の比率 */
+            gap: 40px; /* 左右の隙間 */
+            align-items: start; /* 上揃え */
         }
 
-        /* ▼▼▼ メイン画像のスタイル ▼▼▼ */
-        img { 
-            width: 100%;        /* 親要素(container)の幅いっぱいに広げる */
-            height: auto;       /* 横幅に合わせて高さは自動調整（比率を崩さない） */
-            border-radius: 10px; /* 画像の角を少し丸くする */
-            margin-bottom: 20px; /* 画像の下に20pxの隙間を作る */
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05); /* 画像に薄い影をつけて浮き上がらせる */
+
+        /* ▼▼▼ 左側：画像ギャラリーエリア ▼▼▼ */
+        .gallery-area {
+            position: relative;
         }
 
-        /* ▼▼▼ 「トップに戻る」ボタンのデザイン ▼▼▼ */
-        .back-btn { 
-            display: inline-block; /* リンクだけどボタンのように幅や余白を持てるようにする */
-            margin-top: 30px;      /* 上に30pxの隙間 */
-            
-            text-decoration: none; /* 下線を消す */
-            color: #555;           /* 文字色 */
-            border: 1px solid #999; /* グレーの枠線 */
-            padding: 10px 30px;    /* ボタンの厚み（上下10px 左右30px） */
-            border-radius: 30px;   /* カプセル型に丸くする */
-            
-            transition: 0.3s;      /* ホバー時の変化時間 */
-            font-size: 0.9rem;     /* 文字サイズ */
+        /* メイン画像表示枠 */
+        .main-image-frame {
+            width: 100%;
+            /* アスペクト比を維持しつつ、画面内に収まりやすくする */
+            /* height: auto; もしくは max-height: 80vh; など */
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            position: relative; /* 矢印ボタンの基準 */
+            background: #eee; /* 画像ロード前の色 */
         }
 
-        /* ボタンにマウスを乗せた時の動き */
-        .back-btn:hover {
-            background: rgba(255,255,255,0.8); /* 背景を白くする */
-            color: #000; /* 文字を黒くする */
-            border-color: #555; /* 枠線を濃くする */
+        #current-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: opacity 0.3s ease; /* 切り替え時のフェード用 */
         }
+
+        /* 左右のクリックエリア（矢印） */
+        .nav-click-area {
+            position: absolute;
+            top: 0; bottom: 0;
+            width: 15%; /* 画面の端15%をクリックエリアにする */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            opacity: 0; /* 普段は隠す */
+            transition: opacity 0.3s;
+            color: #fff;
+            font-size: 2rem;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.05); /* うっすら黒くして反応エリアを可視化 */
+        }
+        .nav-click-area:hover { opacity: 1; background: rgba(0,0,0,0.2); }
+        .nav-prev { left: 0; }
+        .nav-next { right: 0; }
+
+        /* サムネイル一覧 */
+        .thumbnail-list {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            overflow-x: auto; /* 画像が多い時に横スクロール */
+            padding-bottom: 10px;
+        }
+
+        .thumb-img {
+            width: 100px; /* サムネイルの幅 */
+            height: 70px; /* サムネイルの高さ */
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            opacity: 0.5; /* 見ていない画像は暗く（半透明） */
+            border: 2px solid transparent; /* 枠線の準備 */
+        }
+
+        .thumb-img:hover { opacity: 0.8; }
+
+        /* 選択中のサムネイル */
+        .thumb-img.active {
+            opacity: 1; /* 明るく */
+            border-color: var(--accent-color); /* 枠線をつける */
+            transform: scale(1.05); /* 少し大きく */
+        }
+
+
+        /* ▼▼▼ 右側：情報エリア（ガラスボックス） ▼▼▼ */
+        .info-area {
+            /* トップページと同じガラスのデザイン */
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            padding: 40px;
+            text-shadow: 0 0 15px rgba(255,255,255, 0.8);
+            
+            /* 長い説明文でもスクロール追従させるなら以下を有効化 */
+            position: sticky;
+            top: 40px;
+        }
+
+        h1 { font-size: 2rem; font-weight: 300; margin: 0 0 30px 0; line-height: 1.2; }
+
+        /* トップページと同じテキストスタイル */
+        .label-text { font-size: 0.85rem; opacity: 0.6; margin: 0 0 5px 0; font-weight: bold; }
+        .value-text { font-size: 0.95rem; line-height: 1.6; margin: 0 0 25px 0; }
         
-        /* 区切り線（水平線）のデザイン */
-        hr {
-            border: 0;
-            border-top: 1px solid rgba(0,0,0,0.1); /* 薄いグレーの線一本だけにする */
-            margin: 30px 0; /* 上下に30pxの余白 */
+        /* 説明文の中のスタイル */
+        .description-body {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            margin-top: 40px;
+            border-top: 1px solid rgba(0,0,0,0.1); /* 区切り線 */
+            padding-top: 30px;
         }
-        
-        /* 文章の行間設定 */
-        p {
-            line-height: 1.8; /* 行間を広めに取る（1.8倍）ことで、長文でも読みやすくする */
-            letter-spacing: 0.05em; /* 文字間隔を少し広げる */
+
+        /* 説明文の中に画像を貼る場合の設定 */
+        .description-body img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 40px;
+            text-decoration: none;
+            color: #555;
+            border: 1px solid #999;
+            padding: 10px 30px;
+            border-radius: 30px;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+        .back-btn:hover { background: #fff; color: #000; }
+
+
+        /* ▼▼▼ スマホ対応（縦並び） ▼▼▼ */
+        @media (max-width: 900px) {
+            .detail-container {
+                grid-template-columns: 1fr; /* 1カラムにする */
+                padding: 20px;
+                gap: 30px;
+            }
+            
+            .info-area {
+                position: static; /* sticky解除 */
+                padding: 30px;
+            }
+
+            .nav-click-area { width: 20%; opacity: 1; background: transparent; text-shadow: 0 0 5px rgba(0,0,0,0.8); } /* スマホでは矢印を常時表示 */
         }
     </style>
 </head>
 <body>
-    
-    <div class="container">
-        
-        <img src="https://placehold.co/800x500/eeeeee/999999/png" alt="作品詳細">
-        
-        <h1>Brainwave Installation</h1>
-        
-        <p><strong>Year:</strong> 2025</p>
-        <p><strong>Tools:</strong> Unreal Engine 5, Python, EEG Sensor (Muse S)</p>
-        
-        <hr>
-        
-        <p>
-            ここに作品の詳しいコンセプトや解説文を書きます。<br>
-            脳波データをリアルタイムで解析し、音と光に変換するインスタレーション作品です。<br>
-            <br>
-            Unreal Engine 5のNiagaraシステムを使用し、アルファ波の増減に応じてパーティクルの挙動が変化します。
-            鑑賞者はヘッドセットを装着することで、自らの内面状態が空間に投影される体験をします。
-        </p>
 
-        <a href="index.html" class="back-btn">← Back to Top</a>
-        
+    <div class="detail-container">
+
+        <div class="gallery-area">
+            
+            <div class="main-image-frame">
+                <div class="nav-click-area nav-prev" onclick="changeImage(-1)">‹</div>
+                
+                <img id="current-image" src="" alt="Main Art">
+                
+                <div class="nav-click-area nav-next" onclick="changeImage(1)">›</div>
+            </div>
+
+            <div class="thumbnail-list" id="thumbnail-container">
+                </div>
+
+        </div>
+
+
+        <div class="info-area">
+            <h1>Suspended Second</h1>
+
+            <p class="label-text">素材</p>
+            <p class="value-text">3Dプリントパーツ, テープLED, 脳波データ</p>
+
+            <p class="label-text">使用ソフトウェア</p>
+            <p class="value-text">MATLAB, Fusion, Python, Arduino</p>
+
+            <p class="label-text">制作年</p>
+            <p class="value-text">2025</p>
+
+            <div class="description-body">
+                <p>
+                    複雑な脳活動を光や音として直観的に体感するインターフェース/アート。<br>
+                    <br>
+                    測定した脳波データから、情報伝達のつながりを表す指標を導出し、生命のミクロな活動をマクロな音、光として出力します。
+                </p>
+                
+                <img src="https://placehold.co/600x400/eeeeee/999999/png?text=Process+Shot" alt="制作プロセス">
+                
+                <p>
+                    構造体には3Dプリンタで出力した特殊なジョイントを使用し、有機的な形状を生成しています。
+                </p>
+            </div>
+
+            <a href="index.html" class="back-btn">← Back to Top</a>
+        </div>
+
     </div>
+
+
+    <script>
+        // ★ここに表示したい画像のファイル名をすべて列挙してください
+        const images = [
+            "Additional Image 5.png",  // 1枚目（メイン）
+            "https://placehold.co/1200x800/333333/aaaaaa/png?text=Detail+01", // 2枚目
+            "https://placehold.co/1200x800/444444/bbbbbb/png?text=Detail+02", // 3枚目
+            "https://placehold.co/1200x800/555555/cccccc/png?text=Setup+View" // 4枚目
+        ];
+
+        let currentIndex = 0; // 現在表示している画像の番号（0スタート）
+
+        const mainImg = document.getElementById('current-image');
+        const thumbContainer = document.getElementById('thumbnail-container');
+
+        // 初期化処理
+        function initGallery() {
+            // 1. メイン画像を表示
+            updateMainImage();
+
+            // 2. サムネイルを生成
+            images.forEach((src, index) => {
+                const thumb = document.createElement('img');
+                thumb.src = src;
+                thumb.className = 'thumb-img';
+                thumb.onclick = () => selectImage(index); // クリックしたらその画像へ
+                thumbContainer.appendChild(thumb);
+            });
+            
+            updateThumbnails(); // 最初のハイライト設定
+        }
+
+        // 画像を切り替える関数
+        function updateMainImage() {
+            // フェード効果っぽくするために一度透明度を下げる（任意）
+            mainImg.style.opacity = 0.5;
+            
+            setTimeout(() => {
+                mainImg.src = images[currentIndex];
+                mainImg.style.opacity = 1;
+            }, 100);
+            
+            updateThumbnails();
+        }
+
+        // 前後ボタンで切り替える関数
+        function changeImage(direction) {
+            currentIndex += direction;
+            
+            // ループ処理（最後→最初、最初→最後）
+            if (currentIndex >= images.length) currentIndex = 0;
+            if (currentIndex < 0) currentIndex = images.length - 1;
+            
+            updateMainImage();
+        }
+
+        // サムネイルクリックで直接指定する関数
+        function selectImage(index) {
+            currentIndex = index;
+            updateMainImage();
+        }
+
+        // サムネイルの明るさを更新する関数
+        function updateThumbnails() {
+            const thumbs = document.querySelectorAll('.thumb-img');
+            thumbs.forEach((thumb, index) => {
+                if (index === currentIndex) {
+                    thumb.classList.add('active'); // 見ている画像
+                } else {
+                    thumb.classList.remove('active'); // 見ていない画像
+                }
+            });
+        }
+
+        // 実行！
+        initGallery();
+    </script>
 
 </body>
 </html>
