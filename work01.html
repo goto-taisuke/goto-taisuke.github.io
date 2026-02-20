@@ -36,7 +36,11 @@
         .detail-container {
             max-width: 1400px;
             margin: 0 auto;
+            
+            /* ★魔法の余白設定 */
+            /* 上に12vhの余白を取る。左側の固定位置(top: 12vh)と一致させることで上辺が完璧に揃います */
             padding: 12vh 40px 100px 40px; 
+            
             display: grid;
             grid-template-columns: 2fr 1fr;
             gap: 40px;
@@ -46,14 +50,22 @@
         /* ▼▼▼ 左側：画像/動画ギャラリーエリア ▼▼▼ */
         .gallery-area {
             position: sticky;
-            top: 12vh; 
+            top: 12vh; /* コンテナのpadding-topと同じ値にすることで1pxも動かなくする */
+            
+            /* ★左側全体の高さを画面の76%に固定。上下12%ずつの余白で中央配置になる */
+            height: 76vh; 
+            
             display: flex;
             flex-direction: column;
         }
 
+        /* メインメディア表示枠 */
         .main-image-frame {
             width: 100%;
-            height: 60vh;
+            /* 固定された76vhの高さから、下のサムネイルとボタンの分を引いた残りを全て画像に使う */
+            flex: 1; 
+            min-height: 0; /* これがないと縮まないブラウザがあるための安全策 */
+            
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
@@ -75,6 +87,7 @@
             transition: opacity 0.3s ease;
         }
 
+        /* 左右のクリックエリア（矢印） */
         .nav-click-area {
             position: absolute; top: 0; bottom: 0; width: 10%; 
             display: flex; align-items: center; justify-content: center;
@@ -86,8 +99,10 @@
         .nav-prev { left: 0; }
         .nav-next { right: 0; }
 
+        /* サムネイル一覧 */
         .thumbnail-list {
             display: flex; gap: 15px; margin-top: 20px; overflow-x: auto; padding-bottom: 10px;
+            flex-shrink: 0; /* 潰れるのを防ぐ */
         }
         .thumbnail-list::-webkit-scrollbar { height: 6px; }
         .thumbnail-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
@@ -107,38 +122,24 @@
 
         /* ▼▼▼ 作品移動用ナビゲーションボタン ▼▼▼ */
         .work-nav-btn {
-            display: inline-block;
-            text-decoration: none;
-            color: #555;
-            border: 1px solid #999;
-            padding: 10px 25px;
-            border-radius: 30px;
-            transition: 0.3s;
-            font-size: 0.9rem;
-            text-align: center;
+            display: inline-block; text-decoration: none; color: #555;
+            border: 1px solid #999; padding: 10px 25px; border-radius: 30px;
+            transition: 0.3s; font-size: 0.9rem; text-align: center;
         }
-        
-        .work-nav-btn:hover:not(.disabled) {
-            background: #fff;
-            color: #000;
-        }
+        .work-nav-btn:hover:not(.disabled) { background: #fff; color: #000; }
+        .work-nav-btn.disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; background: rgba(0,0,0,0.02); }
 
-        .work-nav-btn.disabled {
-            opacity: 0.3; 
-            cursor: not-allowed; 
-            pointer-events: none; 
-            background: rgba(0,0,0,0.02);
-        }
-
-        /* ★修正：PC用の配置（画像に対して中央揃え＆隙間） */
+        /* ★PC用ナビゲーションの配置（中央揃え＆隙間40px） */
         .work-nav-pc {
             display: flex;
-            justify-content: center; /* 左右に散らさず、中央に寄せる */
+            justify-content: center; /* 全体を中央に寄せる */
             gap: 40px; /* 2つのボタンの間に40pxの隙間を作る */
-            margin-top: 30px;
+            margin-top: 20px;
             padding-top: 20px;
             border-top: 1px solid rgba(0,0,0,0.1); 
+            flex-shrink: 0; /* 潰れるのを防ぐ */
         }
+
 
         /* ▼▼▼ 右側：情報エリア ▼▼▼ */
         .info-area {
@@ -160,47 +161,37 @@
             font-size: 0.95rem; line-height: 1.8; margin-top: 40px;
             border-top: 1px solid rgba(0,0,0,0.1); padding-top: 30px;
         }
-        .description-body img {
-            width: 100%; height: auto; border-radius: 8px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
+        .description-body img { width: 100%; height: auto; border-radius: 8px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
 
-        /* ▼▼▼ 表示・非表示の制御用クラス ▼▼▼ */
         .hide-on-mobile { display: block; }
         .show-on-mobile { display: none; }
 
 
-        /* ▼▼▼ スマホ対応（縦並び） ▼▼▼ */
+        /* ▼▼▼ スマホ対応 ▼▼▼ */
         @media (max-width: 900px) {
             .detail-container {
                 grid-template-columns: 1fr; 
-                padding: 40px 20px; 
+                padding: 40px 20px; /* スマホでは上の余白を通常に戻す */
                 gap: 30px;
             }
-            .gallery-area { position: static; }
-            .main-image-frame { height: 50vh; }
+            .gallery-area { 
+                position: static; 
+                height: auto; /* スマホでは高さを自動に戻す */
+            }
+            .main-image-frame { 
+                height: 50vh; 
+                flex: none;
+            }
             .nav-click-area { width: 20%; opacity: 1; background: transparent; text-shadow: 0 0 5px rgba(0,0,0,0.8); }
             .info-area { padding: 30px; }
 
             .hide-on-mobile { display: none !important; }
             .show-on-mobile { 
-                display: flex !important; 
-                justify-content: space-between;
-                align-items: center;
-                gap: 10px;
-                margin-top: 40px;
-                border-top: 1px solid rgba(0,0,0,0.1);
-                padding-top: 30px;
+                display: flex !important; justify-content: space-between; align-items: center; gap: 10px;
+                margin-top: 40px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 30px;
             }
-
-            .show-on-mobile .work-nav-btn {
-                flex: 1; 
-                padding: 12px 0; 
-                font-size: 0.8rem;
-            }
-            .show-on-mobile .main-back {
-                flex: 1.2; 
-                font-weight: bold;
-            }
+            .show-on-mobile .work-nav-btn { flex: 1; padding: 12px 0; font-size: 0.8rem; }
+            .show-on-mobile .main-back { flex: 1.2; font-weight: bold; }
         }
     </style>
 </head>
@@ -243,7 +234,6 @@
                     複雑な脳活動を光や音として直観的に体感するインターフェース/アート。<br>
                     <br>
                     測定した脳波データから、情報伝達のつながりを表す指標を導出し、生命のミクロな活動をマクロな音、光として出力します。
-                    左側のギャラリーは追従するため、このように長文になっても常に作品を見ながらテキストを読むことができます。
                 </p>
                 <img src="https://placehold.co/600x400/eeeeee/999999/png?text=Process+Shot" alt="制作プロセス">
                 <p>
