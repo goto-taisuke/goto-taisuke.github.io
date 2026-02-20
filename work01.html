@@ -11,7 +11,7 @@
             --glass-border: rgba(255, 255, 255, 0.7);
             --text-main: #333;
             --font-base: 'Helvetica Neue', Arial, sans-serif;
-            --accent-color: #555; /* 選択中のサムネイル枠色 */
+            --accent-color: #555;
         }
 
         body {
@@ -32,136 +32,118 @@
 
         a { text-decoration: none; color: inherit; }
 
-        /* ▼▼▼ 全体のレイアウト（PC: 左右分割＆上辺合わせ） ▼▼▼ */
+        /* ▼▼▼ 全体のレイアウト ▼▼▼ */
         .detail-container {
             max-width: 1400px;
             margin: 0 auto;
-            
-            /* ★ポイント: 上に12vhの余白を取ることで、全体を画面の中央付近に下げる */
             padding: 12vh 40px 100px 40px; 
-            
             display: grid;
-            grid-template-columns: 2fr 1fr; /* 左2 : 右1 */
+            grid-template-columns: 2fr 1fr;
             gap: 40px;
-            
-            /* ★ポイント: startにすることで、左右の箱の上辺が完全に一致する */
             align-items: start; 
         }
 
         /* ▼▼▼ 左側：画像/動画ギャラリーエリア ▼▼▼ */
         .gallery-area {
-            /* ★ポイント: スクロール時に画面上から12vhの位置で固定する */
             position: sticky;
             top: 12vh; 
-            
             display: flex;
             flex-direction: column;
         }
 
-        /* メインメディア表示枠 */
         .main-image-frame {
             width: 100%;
-            height: 60vh; /* 高さも画面の60%にしてバランスを取る */
+            height: 60vh;
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             position: relative;
-            /* 動画や縦長画像が来た時の余白を暗くする */
             background: #1a1a1a; 
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* メインの中に生成される画像・動画の共通設定 */
         .media-content {
-            width: 100%;
-            height: 100%;
-            /* ★ポイント: 元のアスペクト比を保ったまま、枠内に完全に収める（クリップさせない） */
+            width: 100%; height: 100%;
             object-fit: contain; 
             display: block;
         }
 
-        /* フェードアニメーション用ラッパー */
         #media-wrapper {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             transition: opacity 0.3s ease;
         }
 
-        /* 左右のクリックエリア（矢印） */
         .nav-click-area {
-            position: absolute;
-            top: 0; bottom: 0;
-            width: 10%; /* 動画の再生ボタンを邪魔しないよう少し狭めに */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-            opacity: 0;
-            transition: opacity 0.3s;
-            color: #fff;
-            font-size: 2.5rem;
-            text-shadow: 0 0 15px rgba(0,0,0,0.8);
+            position: absolute; top: 0; bottom: 0; width: 10%; 
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 10; opacity: 0; transition: opacity 0.3s;
+            color: #fff; font-size: 2.5rem; text-shadow: 0 0 15px rgba(0,0,0,0.8);
             background: rgba(0,0,0,0.05);
         }
         .nav-click-area:hover { opacity: 1; background: rgba(0,0,0,0.2); }
         .nav-prev { left: 0; }
         .nav-next { right: 0; }
 
-        /* サムネイル一覧 */
         .thumbnail-list {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            overflow-x: auto;
-            padding-bottom: 10px;
+            display: flex; gap: 15px; margin-top: 20px; overflow-x: auto; padding-bottom: 10px;
         }
-
-        /* スクロールバーの装飾 */
         .thumbnail-list::-webkit-scrollbar { height: 6px; }
         .thumbnail-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
 
-        .thumb-wrapper {
-            position: relative;
-            cursor: pointer;
-            flex-shrink: 0; /* サムネイルが潰れるのを防ぐ */
-        }
-
+        .thumb-wrapper { position: relative; cursor: pointer; flex-shrink: 0; }
         .thumb-img {
-            width: 100px;
-            height: 70px;
-            object-fit: cover;
-            border-radius: 8px;
-            transition: 0.3s;
-            opacity: 0.4; /* 見ていない画像は暗く */
-            border: 2px solid transparent;
-            display: block;
+            width: 100px; height: 70px; object-fit: cover; border-radius: 8px; transition: 0.3s;
+            opacity: 0.4; border: 2px solid transparent; display: block;
         }
-
         .thumb-wrapper:hover .thumb-img { opacity: 0.8; }
-        
-        /* 現在選択されているサムネイル */
-        .thumb-wrapper.active .thumb-img {
-            opacity: 1; /* 明るくする */
-            border-color: var(--accent-color);
-            transform: scale(1.05);
-        }
+        .thumb-wrapper.active .thumb-img { opacity: 1; border-color: var(--accent-color); transform: scale(1.05); }
 
-        /* サムネイルが「動画」の時につく再生アイコン */
         .video-icon {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 1.5rem;
-            text-shadow: 0 0 5px rgba(0,0,0,0.8);
-            pointer-events: none;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: white; font-size: 1.5rem; text-shadow: 0 0 5px rgba(0,0,0,0.8); pointer-events: none;
         }
 
 
-        /* ▼▼▼ 右側：情報エリア（スクロールする） ▼▼▼ */
+        /* ▼▼▼ 作品移動用ナビゲーションボタン（新規追加） ▼▼▼ */
+        .work-nav-btn {
+            display: inline-block;
+            text-decoration: none;
+            color: #555;
+            border: 1px solid #999;
+            padding: 10px 25px;
+            border-radius: 30px;
+            transition: 0.3s;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        /* 通常時のホバーアクション */
+        .work-nav-btn:hover:not(.disabled) {
+            background: #fff;
+            color: #000;
+        }
+
+        /* 未作成ページのボタン設定（グレーアウト＆クリック不可） */
+        .work-nav-btn.disabled {
+            opacity: 0.3; /* 薄くする */
+            cursor: not-allowed; /* マウスカーソルを禁止マークに */
+            pointer-events: none; /* クリックを完全に無効化 */
+            background: rgba(0,0,0,0.02);
+        }
+
+        /* PC用の配置（左側のサムネイルの下） */
+        .work-nav-pc {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0,0,0,0.1); /* 薄い区切り線 */
+        }
+
+
+        /* ▼▼▼ 右側：情報エリア ▼▼▼ */
         .info-area {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
@@ -170,7 +152,7 @@
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
             padding: 40px;
             text-shadow: 0 0 15px rgba(255,255,255, 0.8);
-            margin-top: 0; /* 上辺を完璧に揃えるための念押し */
+            margin-top: 0; 
         }
 
         h1 { font-size: 2rem; font-weight: 300; margin: 0 0 30px 0; line-height: 1.2; }
@@ -178,42 +160,53 @@
         .value-text { font-size: 0.95rem; line-height: 1.6; margin: 0 0 25px 0; }
         
         .description-body {
-            font-size: 0.95rem;
-            line-height: 1.8;
-            margin-top: 40px;
-            border-top: 1px solid rgba(0,0,0,0.1);
-            padding-top: 30px;
+            font-size: 0.95rem; line-height: 1.8; margin-top: 40px;
+            border-top: 1px solid rgba(0,0,0,0.1); padding-top: 30px;
         }
-        
-        /* 説明文の中の画像 */
         .description-body img {
             width: 100%; height: auto; border-radius: 8px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
-        .back-btn {
-            display: inline-block; margin-top: 40px; text-decoration: none; color: #555;
-            border: 1px solid #999; padding: 10px 30px; border-radius: 30px; transition: 0.3s; font-size: 0.9rem;
-        }
-        .back-btn:hover { background: #fff; color: #000; }
+
+        /* ▼▼▼ 表示・非表示の制御用クラス ▼▼▼ */
+        .hide-on-mobile { display: block; }
+        .show-on-mobile { display: none; }
 
 
-        /* ▼▼▼ スマホ対応（縦並び・スクロール解除） ▼▼▼ */
+        /* ▼▼▼ スマホ対応（縦並び） ▼▼▼ */
         @media (max-width: 900px) {
             .detail-container {
-                grid-template-columns: 1fr; /* 1カラム */
-                padding: 40px 20px; /* スマホでは上の余白を通常に戻す */
+                grid-template-columns: 1fr; 
+                padding: 40px 20px; 
                 gap: 30px;
             }
-            .gallery-area {
-                position: static; /* スマホでは固定を解除 */
-            }
-            .main-image-frame {
-                height: 50vh; /* スマホ用高さ */
-            }
-            .nav-click-area {
-                width: 20%; opacity: 1; background: transparent; text-shadow: 0 0 5px rgba(0,0,0,0.8);
-            }
+            .gallery-area { position: static; }
+            .main-image-frame { height: 50vh; }
+            .nav-click-area { width: 20%; opacity: 1; background: transparent; text-shadow: 0 0 5px rgba(0,0,0,0.8); }
             .info-area { padding: 30px; }
+
+            /* スマホ用の表示切替 */
+            .hide-on-mobile { display: none !important; }
+            .show-on-mobile { 
+                display: flex !important; 
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+                margin-top: 40px;
+                border-top: 1px solid rgba(0,0,0,0.1);
+                padding-top: 30px;
+            }
+
+            /* スマホ用の3連ボタン調整 */
+            .show-on-mobile .work-nav-btn {
+                flex: 1; /* 3つのボタンを等幅に */
+                padding: 12px 0; /* 文字がはみ出さないように左右の余白を消す */
+                font-size: 0.8rem;
+            }
+            .show-on-mobile .main-back {
+                flex: 1.2; /* 「Top」ボタンをほんの少しだけ大きく */
+                font-weight: bold;
+            }
         }
     </style>
 </head>
@@ -225,14 +218,18 @@
             
             <div class="main-image-frame">
                 <div class="nav-click-area nav-prev" onclick="changeMedia(-1)">‹</div>
-                
                 <div id="media-wrapper"></div>
-                
                 <div class="nav-click-area nav-next" onclick="changeMedia(1)">›</div>
             </div>
 
             <div class="thumbnail-list" id="thumbnail-container">
                 </div>
+
+            <div class="work-nav-pc hide-on-mobile">
+                <a href="#" class="work-nav-btn disabled">← Previous Work</a>
+                
+                <a href="work02.html" class="work-nav-btn">Next Work →</a>
+            </div>
 
         </div>
 
@@ -255,66 +252,49 @@
                     測定した脳波データから、情報伝達のつながりを表す指標を導出し、生命のミクロな活動をマクロな音、光として出力します。
                     左側のギャラリーは追従するため、このように長文になっても常に作品を見ながらテキストを読むことができます。
                 </p>
-                
                 <img src="https://placehold.co/600x400/eeeeee/999999/png?text=Process+Shot" alt="制作プロセス">
-                
                 <p>
                     構造体には3Dプリンタで出力した特殊なジョイントを使用し、有機的な形状を生成しています。
                 </p>
             </div>
 
-            <a href="index.html" class="back-btn">← Back to Top</a>
+            <a href="index.html" class="work-nav-btn hide-on-mobile" style="margin-top: 40px;">← Back to Top</a>
+
+            <div class="work-nav-mobile show-on-mobile">
+                <a href="#" class="work-nav-btn disabled">‹ Prev</a>
+                
+                <a href="index.html" class="work-nav-btn main-back">Top</a>
+                
+                <a href="work02.html" class="work-nav-btn">Next ›</a>
+            </div>
+
         </div>
 
     </div>
 
-
     <script>
-        // ★ここを編集するだけで、画像や動画を自由に追加できます★
         const mediaData = [
-            { 
-                type: 'image', 
-                src: 'Additional Image 5.png', // メイン画像のファイル名
-                thumb: 'Additional Image 5.png' // サムネイル画像のファイル名
-            },
-            { 
-                type: 'video', 
-                // ↓表示したい動画(mp4)のURLを入れてください
-                src: 'https://www.w3schools.com/html/mov_bbb.mp4', 
-                // 動画の表紙（サムネイル）。設定するとサイトが劇的に軽くなります
-                thumb: 'https://placehold.co/300x200/555555/ffffff/png?text=Video+Thumb' 
-            },
-            { 
-                type: 'image', 
-                src: 'https://placehold.co/1200x800/444444/bbbbbb/png?text=Detail+02', 
-                thumb: 'https://placehold.co/1200x800/444444/bbbbbb/png?text=Detail+02' 
-            },
-            { 
-                type: 'image', 
-                src: 'https://placehold.co/1200x800/555555/cccccc/png?text=Setup+View', 
-                thumb: 'https://placehold.co/1200x800/555555/cccccc/png?text=Setup+View' 
-            }
+            { type: 'image', src: 'Additional Image 5.png', thumb: 'Additional Image 5.png' },
+            { type: 'video', src: 'https://www.w3schools.com/html/mov_bbb.mp4', thumb: 'https://placehold.co/300x200/555555/ffffff/png?text=Video+Thumb' },
+            { type: 'image', src: 'https://placehold.co/1200x800/444444/bbbbbb/png?text=Detail+02', thumb: 'https://placehold.co/1200x800/444444/bbbbbb/png?text=Detail+02' },
+            { type: 'image', src: 'https://placehold.co/1200x800/555555/cccccc/png?text=Setup+View', thumb: 'https://placehold.co/1200x800/555555/cccccc/png?text=Setup+View' }
         ];
 
         let currentIndex = 0;
         const mediaWrapper = document.getElementById('media-wrapper');
         const thumbContainer = document.getElementById('thumbnail-container');
 
-        // 初期化処理
         function initGallery() {
-            // サムネイルを自動生成
             mediaData.forEach((data, index) => {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'thumb-wrapper';
                 wrapper.onclick = () => selectMedia(index);
 
                 const thumb = document.createElement('img');
-                // thumbの指定があればそれを使用、なければsrcをそのまま使用
                 thumb.src = data.thumb || data.src; 
                 thumb.className = 'thumb-img';
                 wrapper.appendChild(thumb);
 
-                // 動画の場合は再生マーク（▶）をかぶせる
                 if(data.type === 'video'){
                     const icon = document.createElement('div');
                     icon.className = 'video-icon';
@@ -324,49 +304,43 @@
 
                 thumbContainer.appendChild(wrapper);
             });
-            
             updateMainMedia();
         }
 
-        // メイン表示の切り替え
         function updateMainMedia() {
-            mediaWrapper.style.opacity = 0.3; // 一瞬暗くする（フェード効果）
+            mediaWrapper.style.opacity = 0.3; 
             
             setTimeout(() => {
-                mediaWrapper.innerHTML = ''; // 中身をリセット
+                mediaWrapper.innerHTML = ''; 
                 const currentData = mediaData[currentIndex];
 
                 if (currentData.type === 'image') {
-                    // --- 画像を生成 ---
                     const img = document.createElement('img');
                     img.src = currentData.src;
                     img.className = 'media-content';
                     mediaWrapper.appendChild(img);
 
                 } else if (currentData.type === 'video') {
-                    // --- 動画を生成 ---
                     const video = document.createElement('video');
                     video.src = currentData.src;
                     video.className = 'media-content';
                     
-                    // 【最適化】最初から全データを読み込まず、メタデータ（長さ等）だけ読み込む
                     video.preload = 'metadata'; 
-                    video.controls = true; // 再生ボタンを表示
-                    video.autoplay = true; // 切り替えたら自動再生（不要なら消してください）
-                    video.muted = true;    // 自動再生させるためのミュート（ブラウザ仕様対応）
+                    video.controls = true; 
+                    video.autoplay = true; 
+                    video.muted = true;    
                     
-                    if (currentData.thumb) video.poster = currentData.thumb; // 表紙画像を設定
+                    if (currentData.thumb) video.poster = currentData.thumb; 
                     
                     mediaWrapper.appendChild(video);
                 }
                 
-                mediaWrapper.style.opacity = 1; // フェードイン
+                mediaWrapper.style.opacity = 1; 
             }, 150);
             
             updateThumbnails();
         }
 
-        // 前後ボタン用
         function changeMedia(direction) {
             currentIndex += direction;
             if (currentIndex >= mediaData.length) currentIndex = 0;
@@ -374,14 +348,12 @@
             updateMainMedia();
         }
 
-        // サムネイルクリック用
         function selectMedia(index) {
-            if (currentIndex === index) return; // 同じ画像なら何もしない
+            if (currentIndex === index) return; 
             currentIndex = index;
             updateMainMedia();
         }
 
-        // サムネイルの枠線・明るさの更新
         function updateThumbnails() {
             const wrappers = document.querySelectorAll('.thumb-wrapper');
             wrappers.forEach((wrapper, index) => {
@@ -393,7 +365,6 @@
             });
         }
 
-        // 実行開始
         initGallery();
     </script>
 
