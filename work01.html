@@ -37,9 +37,8 @@
             max-width: 1400px;
             margin: 0 auto;
             
-            /* ★魔法の余白設定 */
-            /* 上に12vhの余白を取る。左側の固定位置(top: 12vh)と一致させることで上辺が完璧に揃います */
-            padding: 12vh 40px 100px 40px; 
+            /* ★変更：上の余白を12vhから6vhに半減させました */
+            padding: 6vh 40px 100px 40px; 
             
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -50,10 +49,10 @@
         /* ▼▼▼ 左側：画像/動画ギャラリーエリア ▼▼▼ */
         .gallery-area {
             position: sticky;
-            top: 12vh; /* コンテナのpadding-topと同じ値にすることで1pxも動かなくする */
+            top: 6vh; /* 上の余白(padding)と合わせることでズレを防ぐ */
             
-            /* ★左側全体の高さを画面の76%に固定。上下12%ずつの余白で中央配置になる */
-            height: 76vh; 
+            /* ★変更：余白を減らした分、高さを拡張（100 - 6*2 = 88vh） */
+            height: 88vh; 
             
             display: flex;
             flex-direction: column;
@@ -62,9 +61,8 @@
         /* メインメディア表示枠 */
         .main-image-frame {
             width: 100%;
-            /* 固定された76vhの高さから、下のサムネイルとボタンの分を引いた残りを全て画像に使う */
-            flex: 1; 
-            min-height: 0; /* これがないと縮まないブラウザがあるための安全策 */
+            flex: 1; /* 残りの高さをすべて使う */
+            min-height: 0;
             
             border-radius: 20px;
             overflow: hidden;
@@ -102,7 +100,7 @@
         /* サムネイル一覧 */
         .thumbnail-list {
             display: flex; gap: 15px; margin-top: 20px; overflow-x: auto; padding-bottom: 10px;
-            flex-shrink: 0; /* 潰れるのを防ぐ */
+            flex-shrink: 0;
         }
         .thumbnail-list::-webkit-scrollbar { height: 6px; }
         .thumbnail-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
@@ -129,15 +127,16 @@
         .work-nav-btn:hover:not(.disabled) { background: #fff; color: #000; }
         .work-nav-btn.disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; background: rgba(0,0,0,0.02); }
 
-        /* ★PC用ナビゲーションの配置（中央揃え＆隙間40px） */
+        /* ★修正：PC用ナビゲーションの配置（確実に中央へ） */
         .work-nav-pc {
+            width: 100%; /* 親要素（画像幅）いっぱいに広げる */
             display: flex;
-            justify-content: center; /* 全体を中央に寄せる */
-            gap: 40px; /* 2つのボタンの間に40pxの隙間を作る */
+            justify-content: center; /* 中身を中央に集める */
+            gap: 40px; /* ボタンとボタンの間に40pxの隙間 */
             margin-top: 20px;
             padding-top: 20px;
             border-top: 1px solid rgba(0,0,0,0.1); 
-            flex-shrink: 0; /* 潰れるのを防ぐ */
+            flex-shrink: 0;
         }
 
 
@@ -171,12 +170,12 @@
         @media (max-width: 900px) {
             .detail-container {
                 grid-template-columns: 1fr; 
-                padding: 40px 20px; /* スマホでは上の余白を通常に戻す */
+                padding: 40px 20px; 
                 gap: 30px;
             }
             .gallery-area { 
                 position: static; 
-                height: auto; /* スマホでは高さを自動に戻す */
+                height: auto; 
             }
             .main-image-frame { 
                 height: 50vh; 
