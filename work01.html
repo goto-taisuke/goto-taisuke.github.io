@@ -37,8 +37,8 @@
             max-width: 1400px;
             margin: 0 auto;
             
-            /* ★変更1：上の余白をさらに減らして縦幅を確保（6vh → 3vh） */
-            padding: 3vh 40px 100px 40px; 
+            /* ★修正：上下の余白を半分(12vh → 6vh)にしました */
+            padding: 6vh 40px 100px 40px; 
             
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -49,11 +49,11 @@
         /* ▼▼▼ 左側：画像/動画ギャラリーエリア ▼▼▼ */
         .gallery-area {
             position: sticky;
-            /* ★変更1の続き：追従開始位置も3vhに */
-            top: 3vh; 
+            /* ★修正：上の余白に合わせるため 12vh → 6vh に変更 */
+            top: 6vh; 
             
-            /* ★変更1の続き：余白が減った分、高さをさらに拡張（100 - 3*2 = 94vh） */
-            height: 94vh; 
+            /* ★修正：余白が減った分、高さを拡張 (76vh → 88vh) */
+            height: 88vh; 
             
             display: flex;
             flex-direction: column;
@@ -62,15 +62,12 @@
         /* メインメディア表示枠 */
         .main-image-frame {
             width: 100%;
-            flex: 1;
+            flex: 1; 
             min-height: 0;
-            
             border-radius: 20px;
             overflow: hidden;
-            /* 帯がなくなるので影を少し強めて立体感を出す */
-            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             position: relative;
-            /* 背景色はもう見えなくなるので不要ですが念のため残します */
             background: #1a1a1a; 
             display: flex;
             align-items: center;
@@ -79,11 +76,9 @@
 
         .media-content {
             width: 100%; height: 100%;
-            
-            /* ★変更2（ここが重要）：contain から cover に変更 */
-            /* これにより、枠に合わせて画像が拡大され、隙間なく埋め尽くされます（はみ出た部分はトリミングされます） */
+            /* ★修正：黒い帯を出さないため contain → cover に変更。
+               枠の比率に合わせて拡大され、はみ出た部分はトリミングされます */
             object-fit: cover; 
-            
             display: block;
         }
 
@@ -98,7 +93,7 @@
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; z-index: 10; opacity: 0; transition: opacity 0.3s;
             color: #fff; font-size: 2.5rem; text-shadow: 0 0 15px rgba(0,0,0,0.8);
-            /* 画像が全面に来るので、矢印の背景を少し濃くして見やすくする */
+            /* 画像が全面に表示されるため、矢印が見えやすいよう背景を少し濃く */
             background: rgba(0,0,0,0.1);
         }
         .nav-click-area:hover { opacity: 1; background: rgba(0,0,0,0.3); }
@@ -108,7 +103,7 @@
         /* サムネイル一覧 */
         .thumbnail-list {
             display: flex; gap: 15px; margin-top: 20px; overflow-x: auto; padding-bottom: 10px;
-            flex-shrink: 0;
+            flex-shrink: 0; 
         }
         .thumbnail-list::-webkit-scrollbar { height: 6px; }
         .thumbnail-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
@@ -135,15 +130,16 @@
         .work-nav-btn:hover:not(.disabled) { background: #fff; color: #000; }
         .work-nav-btn.disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; background: rgba(0,0,0,0.02); }
 
+        /* ★修正：PC用ナビゲーションの配置 */
         .work-nav-pc {
-            width: 100%;
+            width: 100%; /* これを追加することで、親要素いっぱいに広がり中央揃えが機能します */
             display: flex;
-            justify-content: center;
-            gap: 40px;
+            justify-content: center; /* 中央に寄せる */
+            gap: 40px; /* 2つのボタンの間に40pxの隙間を作る */
             margin-top: 20px;
             padding-top: 20px;
             border-top: 1px solid rgba(0,0,0,0.1); 
-            flex-shrink: 0;
+            flex-shrink: 0; 
         }
 
 
@@ -230,7 +226,7 @@
             <p class="value-text">3Dプリントパーツ, テープLED, 脳波データ</p>
 
             <p class="label-text">使用ソフトウェア</p>
-            <p class="value-text">MATLAB, Fusion, Python, Arduino</p>
+            <p class="value-text">MATLAB, Autodesk Fusion, Python, Arduino</p>
 
             <p class="label-text">制作年</p>
             <p class="value-text">2025</p>
@@ -262,9 +258,8 @@
     <script>
         const mediaData = [
             { type: 'image', src: 'Additional Image 5.png', thumb: 'Additional Image 5.png' },
-            { type: 'video', src: 'https://www.w3schools.com/html/mov_bbb.mp4', thumb: 'https://placehold.co/300x200/555555/ffffff/png?text=Video+Thumb' },
-            { type: 'image', src: 'https://placehold.co/1200x800/444444/bbbbbb/png?text=Detail+02', thumb: 'https://placehold.co/1200x800/444444/bbbbbb/png?text=Detail+02' },
-            { type: 'image', src: 'https://placehold.co/1200x800/555555/cccccc/png?text=Setup+View', thumb: 'https://placehold.co/1200x800/555555/cccccc/png?text=Setup+View' }
+            { type: 'video', src: 'pv_short.mp4', thumb: 'pv_short_thumb.png' }, // ※必要に応じて動画サムネを指定してください
+            { type: 'image', src: 'workSS_Image2.png', thumb: 'workSS_Image2.png' },
         ];
 
         let currentIndex = 0;
