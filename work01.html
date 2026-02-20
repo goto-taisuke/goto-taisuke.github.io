@@ -105,8 +105,7 @@
             color: white; font-size: 1.5rem; text-shadow: 0 0 5px rgba(0,0,0,0.8); pointer-events: none;
         }
 
-
-        /* ▼▼▼ 作品移動用ナビゲーションボタン（新規追加） ▼▼▼ */
+        /* ▼▼▼ 作品移動用ナビゲーションボタン ▼▼▼ */
         .work-nav-btn {
             display: inline-block;
             text-decoration: none;
@@ -119,29 +118,27 @@
             text-align: center;
         }
         
-        /* 通常時のホバーアクション */
         .work-nav-btn:hover:not(.disabled) {
             background: #fff;
             color: #000;
         }
 
-        /* 未作成ページのボタン設定（グレーアウト＆クリック不可） */
         .work-nav-btn.disabled {
-            opacity: 0.3; /* 薄くする */
-            cursor: not-allowed; /* マウスカーソルを禁止マークに */
-            pointer-events: none; /* クリックを完全に無効化 */
+            opacity: 0.3; 
+            cursor: not-allowed; 
+            pointer-events: none; 
             background: rgba(0,0,0,0.02);
         }
 
-        /* PC用の配置（左側のサムネイルの下） */
+        /* ★修正：PC用の配置（画像に対して中央揃え＆隙間） */
         .work-nav-pc {
             display: flex;
-            justify-content: space-between;
+            justify-content: center; /* 左右に散らさず、中央に寄せる */
+            gap: 40px; /* 2つのボタンの間に40pxの隙間を作る */
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 1px solid rgba(0,0,0,0.1); /* 薄い区切り線 */
+            border-top: 1px solid rgba(0,0,0,0.1); 
         }
-
 
         /* ▼▼▼ 右側：情報エリア ▼▼▼ */
         .info-area {
@@ -167,7 +164,6 @@
             width: 100%; height: auto; border-radius: 8px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
-
         /* ▼▼▼ 表示・非表示の制御用クラス ▼▼▼ */
         .hide-on-mobile { display: block; }
         .show-on-mobile { display: none; }
@@ -185,7 +181,6 @@
             .nav-click-area { width: 20%; opacity: 1; background: transparent; text-shadow: 0 0 5px rgba(0,0,0,0.8); }
             .info-area { padding: 30px; }
 
-            /* スマホ用の表示切替 */
             .hide-on-mobile { display: none !important; }
             .show-on-mobile { 
                 display: flex !important; 
@@ -197,14 +192,13 @@
                 padding-top: 30px;
             }
 
-            /* スマホ用の3連ボタン調整 */
             .show-on-mobile .work-nav-btn {
-                flex: 1; /* 3つのボタンを等幅に */
-                padding: 12px 0; /* 文字がはみ出さないように左右の余白を消す */
+                flex: 1; 
+                padding: 12px 0; 
                 font-size: 0.8rem;
             }
             .show-on-mobile .main-back {
-                flex: 1.2; /* 「Top」ボタンをほんの少しだけ大きく */
+                flex: 1.2; 
                 font-weight: bold;
             }
         }
@@ -227,7 +221,6 @@
 
             <div class="work-nav-pc hide-on-mobile">
                 <a href="#" class="work-nav-btn disabled">← Previous Work</a>
-                
                 <a href="work02.html" class="work-nav-btn">Next Work →</a>
             </div>
 
@@ -262,9 +255,7 @@
 
             <div class="work-nav-mobile show-on-mobile">
                 <a href="#" class="work-nav-btn disabled">‹ Prev</a>
-                
                 <a href="index.html" class="work-nav-btn main-back">Top</a>
-                
                 <a href="work02.html" class="work-nav-btn">Next ›</a>
             </div>
 
