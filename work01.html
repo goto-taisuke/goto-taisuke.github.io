@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Suspended Second - Portfolio</title>
     <style>
-        /* ▼▼▼ 基本設定（変更なし） ▼▼▼ */
+        /* ▼▼▼ 基本設定 ▼▼▼ */
         :root {
             --glass-bg: rgba(255, 255, 255, 0.65);
             --glass-border: rgba(255, 255, 255, 0.7);
             --text-main: #333;
             --font-base: 'Helvetica Neue', Arial, sans-serif;
-            --accent-color: #555;
+            --accent-color: #555; /* 選択中のサムネイル枠色 */
         }
 
         body {
@@ -32,56 +32,58 @@
 
         a { text-decoration: none; color: inherit; }
 
-        /* ▼▼▼ 全体のレイアウト ▼▼▼ */
+        /* ▼▼▼ 全体のレイアウト（PC: 左右分割＆上辺合わせ） ▼▼▼ */
         .detail-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 40px;
+            
+            /* ★ポイント: 上に12vhの余白を取ることで、全体を画面の中央付近に下げる */
+            padding: 12vh 40px 100px 40px; 
+            
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 2fr 1fr; /* 左2 : 右1 */
             gap: 40px;
-            align-items: start;
+            
+            /* ★ポイント: startにすることで、左右の箱の上辺が完全に一致する */
+            align-items: start; 
         }
 
-        /* ▼▼▼ 左側：画像ギャラリーエリア（★追従設定） ▼▼▼ */
+        /* ▼▼▼ 左側：画像/動画ギャラリーエリア ▼▼▼ */
         .gallery-area {
-            /* スクロール時に画面上部で止まる設定 */
+            /* ★ポイント: スクロール時に画面上から12vhの位置で固定する */
             position: sticky;
-            top: 40px;
+            top: 12vh; 
             
-            /* 画面の高さを超えないように制限（サムネイルが隠れるのを防ぐ） */
-            max-height: calc(100vh - 80px); 
             display: flex;
             flex-direction: column;
         }
 
-        /* メイン表示枠 */
+        /* メインメディア表示枠 */
         .main-image-frame {
             width: 100%;
-            /* メインエリアの高さを制限。余った部分にサムネイルが入る */
-            height: 65vh; 
+            height: 60vh; /* 高さも画面の60%にしてバランスを取る */
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             position: relative;
-            background: #222; /* 動画や画像の余白を黒く見せるため */
+            /* 動画や縦長画像が来た時の余白を暗くする */
+            background: #1a1a1a; 
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* 中に入る画像・動画の共通スタイル */
+        /* メインの中に生成される画像・動画の共通設定 */
         .media-content {
             width: 100%;
             height: 100%;
-            /* object-fit: contain; にすることで、どんな比率の画像・動画も
-               見切れる（クリップされる）ことなく全体が表示されます */
+            /* ★ポイント: 元のアスペクト比を保ったまま、枠内に完全に収める（クリップさせない） */
             object-fit: contain; 
             display: block;
         }
 
-        /* 画像・動画のフェード切り替え用ラッパー */
-        #media-container {
+        /* フェードアニメーション用ラッパー */
+        #media-wrapper {
             width: 100%;
             height: 100%;
             transition: opacity 0.3s ease;
@@ -91,7 +93,7 @@
         .nav-click-area {
             position: absolute;
             top: 0; bottom: 0;
-            width: 10%; /* 動画の操作パネルに被らないように少し狭める */
+            width: 10%; /* 動画の再生ボタンを邪魔しないよう少し狭めに */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -116,36 +118,38 @@
             overflow-x: auto;
             padding-bottom: 10px;
         }
-        
-        /* スクロールバーを見えにくくする（綺麗に見せるため） */
+
+        /* スクロールバーの装飾 */
         .thumbnail-list::-webkit-scrollbar { height: 6px; }
         .thumbnail-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
+
+        .thumb-wrapper {
+            position: relative;
+            cursor: pointer;
+            flex-shrink: 0; /* サムネイルが潰れるのを防ぐ */
+        }
 
         .thumb-img {
             width: 100px;
             height: 70px;
             object-fit: cover;
             border-radius: 8px;
-            cursor: pointer;
             transition: 0.3s;
-            opacity: 0.5;
+            opacity: 0.4; /* 見ていない画像は暗く */
             border: 2px solid transparent;
-            /* サムネイルが潰れないようにする */
-            flex-shrink: 0; 
+            display: block;
         }
 
-        .thumb-img:hover { opacity: 0.8; }
-        .thumb-img.active {
-            opacity: 1;
+        .thumb-wrapper:hover .thumb-img { opacity: 0.8; }
+        
+        /* 現在選択されているサムネイル */
+        .thumb-wrapper.active .thumb-img {
+            opacity: 1; /* 明るくする */
             border-color: var(--accent-color);
             transform: scale(1.05);
         }
 
-        /*動画とわかるようにサムネイルに再生マーク風の装飾をつける場合*/
-        .thumb-wrapper {
-            position: relative;
-            cursor: pointer;
-        }
+        /* サムネイルが「動画」の時につく再生アイコン */
         .video-icon {
             position: absolute;
             top: 50%; left: 50%;
@@ -153,11 +157,11 @@
             color: white;
             font-size: 1.5rem;
             text-shadow: 0 0 5px rgba(0,0,0,0.8);
-            pointer-events: none; /* クリックの邪魔をしない */
+            pointer-events: none;
         }
 
 
-        /* ▼▼▼ 右側：情報エリア（★追従解除） ▼▼▼ */
+        /* ▼▼▼ 右側：情報エリア（スクロールする） ▼▼▼ */
         .info-area {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
@@ -166,7 +170,7 @@
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
             padding: 40px;
             text-shadow: 0 0 15px rgba(255,255,255, 0.8);
-            /* ★ここにあった position: sticky; を削除しました */
+            margin-top: 0; /* 上辺を完璧に揃えるための念押し */
         }
 
         h1 { font-size: 2rem; font-weight: 300; margin: 0 0 30px 0; line-height: 1.2; }
@@ -180,23 +184,35 @@
             border-top: 1px solid rgba(0,0,0,0.1);
             padding-top: 30px;
         }
-        .description-body img { width: 100%; height: auto; border-radius: 8px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .back-btn { display: inline-block; margin-top: 40px; text-decoration: none; color: #555; border: 1px solid #999; padding: 10px 30px; border-radius: 30px; transition: 0.3s; font-size: 0.9rem; }
+        
+        /* 説明文の中の画像 */
+        .description-body img {
+            width: 100%; height: auto; border-radius: 8px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .back-btn {
+            display: inline-block; margin-top: 40px; text-decoration: none; color: #555;
+            border: 1px solid #999; padding: 10px 30px; border-radius: 30px; transition: 0.3s; font-size: 0.9rem;
+        }
         .back-btn:hover { background: #fff; color: #000; }
 
-        /* ▼▼▼ スマホ対応 ▼▼▼ */
+
+        /* ▼▼▼ スマホ対応（縦並び・スクロール解除） ▼▼▼ */
         @media (max-width: 900px) {
             .detail-container {
-                grid-template-columns: 1fr;
-                padding: 20px; gap: 30px;
+                grid-template-columns: 1fr; /* 1カラム */
+                padding: 40px 20px; /* スマホでは上の余白を通常に戻す */
+                gap: 30px;
             }
             .gallery-area {
-                /* スマホでは固定を解除し、普通のスクロールに戻す */
-                position: static; 
-                max-height: none;
+                position: static; /* スマホでは固定を解除 */
             }
-            .main-image-frame { height: 50vh; }
-            .nav-click-area { width: 15%; opacity: 1; background: transparent; text-shadow: 0 0 5px rgba(0,0,0,0.8); }
+            .main-image-frame {
+                height: 50vh; /* スマホ用高さ */
+            }
+            .nav-click-area {
+                width: 20%; opacity: 1; background: transparent; text-shadow: 0 0 5px rgba(0,0,0,0.8);
+            }
             .info-area { padding: 30px; }
         }
     </style>
@@ -206,16 +222,18 @@
     <div class="detail-container">
 
         <div class="gallery-area">
+            
             <div class="main-image-frame">
                 <div class="nav-click-area nav-prev" onclick="changeMedia(-1)">‹</div>
                 
-                <div id="media-container"></div>
+                <div id="media-wrapper"></div>
                 
                 <div class="nav-click-area nav-next" onclick="changeMedia(1)">›</div>
             </div>
 
             <div class="thumbnail-list" id="thumbnail-container">
                 </div>
+
         </div>
 
         <div class="info-area">
@@ -234,9 +252,12 @@
                 <p>
                     複雑な脳活動を光や音として直観的に体感するインターフェース/アート。<br>
                     <br>
-                    右側のこのエリアだけがスクロールし、左側のメディアは固定されたままになります。長い説明文やプロセス画像をたくさん配置しても快適に閲覧できます。
+                    測定した脳波データから、情報伝達のつながりを表す指標を導出し、生命のミクロな活動をマクロな音、光として出力します。
+                    左側のギャラリーは追従するため、このように長文になっても常に作品を見ながらテキストを読むことができます。
                 </p>
+                
                 <img src="https://placehold.co/600x400/eeeeee/999999/png?text=Process+Shot" alt="制作プロセス">
+                
                 <p>
                     構造体には3Dプリンタで出力した特殊なジョイントを使用し、有機的な形状を生成しています。
                 </p>
@@ -247,21 +268,21 @@
 
     </div>
 
+
     <script>
-        // ★メディアデータのリスト（画像も動画もここに書きます）
+        // ★ここを編集するだけで、画像や動画を自由に追加できます★
         const mediaData = [
             { 
                 type: 'image', 
-                src: 'Additional Image 5.png', 
-                thumb: 'Additional Image 5.png' 
+                src: 'Additional Image 5.png', // メイン画像のファイル名
+                thumb: 'Additional Image 5.png' // サムネイル画像のファイル名
             },
             { 
                 type: 'video', 
-                // ↓ ここに動画ファイルのURL（例: my_art.mp4）を入れます。
-                // テスト用にフリーの動画URLを入れています。
+                // ↓表示したい動画(mp4)のURLを入れてください
                 src: 'https://www.w3schools.com/html/mov_bbb.mp4', 
-                // 動画用のサムネイル画像（省略可能ですが、軽量化のために推奨）
-                thumb: 'https://placehold.co/300x200/555/fff/png?text=Video' 
+                // 動画の表紙（サムネイル）。設定するとサイトが劇的に軽くなります
+                thumb: 'https://placehold.co/300x200/555555/ffffff/png?text=Video+Thumb' 
             },
             { 
                 type: 'image', 
@@ -276,19 +297,19 @@
         ];
 
         let currentIndex = 0;
-        const mediaContainer = document.getElementById('media-container');
+        const mediaWrapper = document.getElementById('media-wrapper');
         const thumbContainer = document.getElementById('thumbnail-container');
 
         // 初期化処理
         function initGallery() {
-            // サムネイルを生成
+            // サムネイルを自動生成
             mediaData.forEach((data, index) => {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'thumb-wrapper';
                 wrapper.onclick = () => selectMedia(index);
 
                 const thumb = document.createElement('img');
-                // thumbプロパティがあればそれを使用、なければsrcを使用
+                // thumbの指定があればそれを使用、なければsrcをそのまま使用
                 thumb.src = data.thumb || data.src; 
                 thumb.className = 'thumb-img';
                 wrapper.appendChild(thumb);
@@ -307,43 +328,45 @@
             updateMainMedia();
         }
 
-        // メインの画像/動画を切り替える関数
+        // メイン表示の切り替え
         function updateMainMedia() {
-            mediaContainer.style.opacity = 0.3; // フェードアウト
+            mediaWrapper.style.opacity = 0.3; // 一瞬暗くする（フェード効果）
             
             setTimeout(() => {
-                mediaContainer.innerHTML = ''; // 中身を一旦リセット
+                mediaWrapper.innerHTML = ''; // 中身をリセット
                 const currentData = mediaData[currentIndex];
 
                 if (currentData.type === 'image') {
-                    // --- 画像の場合 ---
+                    // --- 画像を生成 ---
                     const img = document.createElement('img');
                     img.src = currentData.src;
                     img.className = 'media-content';
-                    mediaContainer.appendChild(img);
+                    mediaWrapper.appendChild(img);
 
                 } else if (currentData.type === 'video') {
-                    // --- 動画の場合 ---
+                    // --- 動画を生成 ---
                     const video = document.createElement('video');
                     video.src = currentData.src;
                     video.className = 'media-content';
                     
-                    // 【最適化】ページを開いた瞬間に動画全体をダウンロードさせない設定
+                    // 【最適化】最初から全データを読み込まず、メタデータ（長さ等）だけ読み込む
                     video.preload = 'metadata'; 
-                    // 再生ボタンなどのコントロールを表示
-                    video.controls = true; 
-                    // 動画の表紙（サムネイル）を設定
-                    if (currentData.thumb) video.poster = currentData.thumb; 
+                    video.controls = true; // 再生ボタンを表示
+                    video.autoplay = true; // 切り替えたら自動再生（不要なら消してください）
+                    video.muted = true;    // 自動再生させるためのミュート（ブラウザ仕様対応）
                     
-                    mediaContainer.appendChild(video);
+                    if (currentData.thumb) video.poster = currentData.thumb; // 表紙画像を設定
+                    
+                    mediaWrapper.appendChild(video);
                 }
                 
-                mediaContainer.style.opacity = 1; // フェードイン
+                mediaWrapper.style.opacity = 1; // フェードイン
             }, 150);
             
             updateThumbnails();
         }
 
+        // 前後ボタン用
         function changeMedia(direction) {
             currentIndex += direction;
             if (currentIndex >= mediaData.length) currentIndex = 0;
@@ -351,23 +374,26 @@
             updateMainMedia();
         }
 
+        // サムネイルクリック用
         function selectMedia(index) {
+            if (currentIndex === index) return; // 同じ画像なら何もしない
             currentIndex = index;
             updateMainMedia();
         }
 
+        // サムネイルの枠線・明るさの更新
         function updateThumbnails() {
-            const thumbs = document.querySelectorAll('.thumb-img');
-            thumbs.forEach((thumb, index) => {
+            const wrappers = document.querySelectorAll('.thumb-wrapper');
+            wrappers.forEach((wrapper, index) => {
                 if (index === currentIndex) {
-                    thumb.classList.add('active');
+                    wrapper.classList.add('active');
                 } else {
-                    thumb.classList.remove('active');
+                    wrapper.classList.remove('active');
                 }
             });
         }
 
-        // 実行
+        // 実行開始
         initGallery();
     </script>
 
