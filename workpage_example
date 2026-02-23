@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suspended Second - Portfolio</title>
+    <style>
+        /*  基本設定  */
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.7);
+            --text-main: #333;
+            --font-base: 'Helvetica Neue', Arial, sans-serif;
+            --accent-color: #555;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: var(--font-base);
+            color: var(--text-main);
+            background: linear-gradient(-45deg, #fdfbfb, #ebedee, #fdfbfb, #e6dee9);
+            background-size: 400% 400%;
+            animation: gradientBG 20s ease infinite;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientBG { 
+            0% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; } 
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        /*  全体のレイアウト  */
+        .detail-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            
+            padding: 6vh 40px 100px 40px; 
+            
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            align-items: start; 
+        }
+
+        /*  左側：画像/動画ギャラリーエリア  */
+        .gallery-area {
+            position: sticky;
+            top: 6vh; 
+            
+            height: 88vh; 
+            
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* メインメディア表示枠 */
+        .main-image-frame {
+            width: 100%;
+            flex: 1; 
+            min-height: 0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            position: relative;
+            background: #1a1a1a; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .media-content {
+            width: 100%; height: 100%;
+
+            object-fit: cover; 
+            display: block;
+        }
+
+        #media-wrapper {
+            width: 100%; height: 100%;
+            transition: opacity 0.3s ease;
+        }
+
+        /* 左右のクリックエリア（矢印） */
+        .nav-click-area {
+            position: absolute; top: 0; bottom: 0; width: 10%; 
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 10; opacity: 0; transition: opacity 0.3s;
+            color: #fff; font-size: 2.5rem; text-shadow: 0 0 15px rgba(0,0,0,0.8);
+            /* 画像が全面に表示されるため、矢印が見えやすいよう背景を少し濃く */
+            background: rgba(0,0,0,0.1);
+        }
+        .nav-click-area:hover { opacity: 1; background: rgba(0,0,0,0.3); }
+        .nav-prev { left: 0; }
+        .nav-next { right: 0; }
+
+        /* サムネイル一覧 */
+        .thumbnail-list {
+            display: flex; gap: 15px; margin-top: 20px; overflow-x: auto; padding-bottom: 10px;
+            flex-shrink: 0; 
+        }
+        .thumbnail-list::-webkit-scrollbar { height: 6px; }
+        .thumbnail-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
+
+        .thumb-wrapper { position: relative; cursor: pointer; flex-shrink: 0; }
+        .thumb-img {
+            width: 100px; height: 70px; object-fit: cover; border-radius: 8px; transition: 0.3s;
+            opacity: 0.4; border: 2px solid transparent; display: block;
+        }
+        .thumb-wrapper:hover .thumb-img { opacity: 0.8; }
+        .thumb-wrapper.active .thumb-img { opacity: 1; border-color: var(--accent-color); transform: scale(1.05); }
+
+        .video-icon {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: white; font-size: 1.5rem; text-shadow: 0 0 5px rgba(0,0,0,0.8); pointer-events: none;
+        }
+
+        /*  作品移動用ナビゲーションボタン  */
+        .work-nav-btn {
+            display: inline-block; text-decoration: none; color: #555;
+            border: 1px solid #999; padding: 10px 25px; border-radius: 30px;
+            transition: 0.3s; font-size: 0.9rem; text-align: center;
+        }
+        .work-nav-btn:hover:not(.disabled) { background: #fff; color: #000; }
+        .work-nav-btn.disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; background: rgba(0,0,0,0.02); }
+
+        .work-nav-pc {
+            width: 100%; 
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0,0,0,0.1); 
+            flex-shrink: 0; 
+        }
+
+
+        /*  右側：情報エリア  */
+        .info-area {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            padding: 40px;
+            text-shadow: 0 0 15px rgba(255,255,255, 0.8);
+            margin-top: 0; 
+        }
+
+        h1 { font-size: 2rem; font-weight: 300; margin: 0 0 30px 0; line-height: 1.2; }
+        .label-text { font-size: 0.85rem; opacity: 0.6; margin: 0 0 5px 0; font-weight: bold; }
+        .value-text { font-size: 0.95rem; line-height: 1.6; margin: 0 0 25px 0; }
+        
+        .description-body {
+            font-size: 0.95rem; line-height: 1.8; margin-top: 40px;
+            border-top: 1px solid rgba(0,0,0,0.1); padding-top: 30px;
+        }
+        .description-body img { width: 100%; height: auto; border-radius: 8px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+
+        .hide-on-mobile { display: block; }
+        .show-on-mobile { display: none; }
+
+
+        /*  スマホ対応  */
+        @media (max-width: 900px) {
+            .detail-container {
+                grid-template-columns: 1fr; 
+                padding: 40px 20px;
+                gap: 30px;
+            }
+            .gallery-area { 
+                position: static; 
+                height: auto; 
+            }
+            .main-image-frame { 
+                height: 50vh; 
+                flex: none;
+            }
+            .nav-click-area { width: 20%; opacity: 1; background: transparent; text-shadow: 0 0 5px rgba(0,0,0,0.8); }
+            .info-area { padding: 30px; }
+
+            .hide-on-mobile { display: none !important; }
+            .show-on-mobile { 
+                display: flex !important; justify-content: space-between; align-items: center; gap: 10px;
+                margin-top: 40px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 30px;
+            }
+            .show-on-mobile .work-nav-btn { flex: 1; padding: 12px 0; font-size: 0.8rem; }
+            .show-on-mobile .main-back { flex: 1.2; font-weight: bold; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="detail-container">
+
+        <div class="gallery-area">
+            
+            <div class="main-image-frame">
+                <div class="nav-click-area nav-prev" onclick="changeMedia(-1)">‹</div>
+                <div id="media-wrapper"></div>
+                <div class="nav-click-area nav-next" onclick="changeMedia(1)">›</div>
+            </div>
+
+            <div class="thumbnail-list" id="thumbnail-container">
+                </div>
+
+            <div class="work-nav-pc hide-on-mobile">
+                <a href="#" class="work-nav-btn disabled">← Previous Work</a>
+                <a href="work02.html" class="work-nav-btn">Next Work →</a>
+            </div>
+
+        </div>
+
+        <div class="info-area">
+            <h1>Suspended Second</h1>
+
+            <p class="label-text">素材</p>
+            <p class="value-text">3Dプリントパーツ, テープLED, 脳波データ</p>
+
+            <p class="label-text">使用ソフトウェア</p>
+            <p class="value-text">MATLAB, Autodesk Fusion, Python, Arduino</p>
+
+            <p class="label-text">制作年</p>
+            <p class="value-text">2025</p>
+
+            <div class="description-body">
+                <p>
+                    複雑な脳活動を光や音として直観的に体感するインターフェース/アート。<br>
+                    <br>
+                    測定した脳波データから、神経科学における機能的結合性の指標である”debiased estimator of the Weighted Phase Lag Index”を導出し、音や光にマッピング
+する。
+                </p>
+                <img src="https://placehold.co/600x400/eeeeee/999999/png?text=Process+Shot" alt="制作プロセス">
+                <p>
+                    構造体には3Dプリンタで出力した特殊なジョイントを使用し、有機的な形状を生成しています。
+                </p>
+            </div>
+
+            <a href="index.html" class="work-nav-btn hide-on-mobile" style="margin-top: 40px;">← Back to Top</a>
+
+            <div class="work-nav-mobile show-on-mobile">
+                <a href="#" class="work-nav-btn disabled">‹ Prev</a>
+                <a href="index.html" class="work-nav-btn main-back">Top</a>
+                <a href="work02.html" class="work-nav-btn">Next ›</a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        const mediaData = [
+            { type: 'image', src: 'Additional Image 5.png', thumb: 'Additional Image 5.png' },
+            { type: 'video', src: 'pv_short.mp4', thumb: 'pv_short_thumb.png' }, // ※必要に応じて動画サムネを指定してください
+            { type: 'image', src: 'workSS_Image2.png', thumb: 'workSS_Image2.png' },
+        ];
+
+        let currentIndex = 0;
+        const mediaWrapper = document.getElementById('media-wrapper');
+        const thumbContainer = document.getElementById('thumbnail-container');
+
+        function initGallery() {
+            mediaData.forEach((data, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'thumb-wrapper';
+                wrapper.onclick = () => selectMedia(index);
+
+                const thumb = document.createElement('img');
+                thumb.src = data.thumb || data.src; 
+                thumb.className = 'thumb-img';
+                wrapper.appendChild(thumb);
+
+                if(data.type === 'video'){
+                    const icon = document.createElement('div');
+                    icon.className = 'video-icon';
+                    icon.innerHTML = '▶';
+                    wrapper.appendChild(icon);
+                }
+
+                thumbContainer.appendChild(wrapper);
+            });
+            updateMainMedia();
+        }
+
+        function updateMainMedia() {
+            mediaWrapper.style.opacity = 0.3; 
+            
+            setTimeout(() => {
+                mediaWrapper.innerHTML = ''; 
+                const currentData = mediaData[currentIndex];
+
+                if (currentData.type === 'image') {
+                    const img = document.createElement('img');
+                    img.src = currentData.src;
+                    img.className = 'media-content';
+                    mediaWrapper.appendChild(img);
+
+                } else if (currentData.type === 'video') {
+                    const video = document.createElement('video');
+                    video.src = currentData.src;
+                    video.className = 'media-content';
+                    
+                    video.preload = 'metadata'; 
+                    video.controls = true; 
+                    video.autoplay = true; 
+                    video.muted = true;    
+                    
+                    if (currentData.thumb) video.poster = currentData.thumb; 
+                    
+                    mediaWrapper.appendChild(video);
+                }
+                
+                mediaWrapper.style.opacity = 1; 
+            }, 150);
+            
+            updateThumbnails();
+        }
+
+        function changeMedia(direction) {
+            currentIndex += direction;
+            if (currentIndex >= mediaData.length) currentIndex = 0;
+            if (currentIndex < 0) currentIndex = mediaData.length - 1;
+            updateMainMedia();
+        }
+
+        function selectMedia(index) {
+            if (currentIndex === index) return; 
+            currentIndex = index;
+            updateMainMedia();
+        }
+
+        function updateThumbnails() {
+            const wrappers = document.querySelectorAll('.thumb-wrapper');
+            wrappers.forEach((wrapper, index) => {
+                if (index === currentIndex) {
+                    wrapper.classList.add('active');
+                } else {
+                    wrapper.classList.remove('active');
+                }
+            });
+        }
+
+        initGallery();
+    </script>
+
+</body>
+</html>
