@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suspended Second - Portfolio</title>
+    <title>3D Printed Shoes 1 - Portfolio</title>
     <style>
         /* ▼▼▼ 基本設定 ▼▼▼ */
         :root {
@@ -220,58 +220,52 @@
         </div>
 
         <div class="info-area">
-            <h1>Suspended Second</h1>
+            <h1>3D Printed Shoes "ZEPHYRON"</h1>
 
             <p class="label-text">素材</p>
-            <p class="value-text">3Dプリントパーツ, テープLED, 脳波データ</p>
+            <p class="value-text">熱可塑性ポリウレタン(TPU)</p>
 
             <p class="label-text">使用ソフトウェア</p>
-            <p class="value-text">MATLAB, Autodesk Fusion, Python, Arduino</p>
+            <p class="value-text">Autodesk Fusion, Ultimaker Cura</p>
 
             <p class="label-text">制作年</p>
             <p class="value-text">2025</p>
 
             <div class="description-body">
                 <p>
-                    複雑な脳活動を光や音として直観的に体感するインターフェース/アート。<br>
+                    3Dプリンターを用いて一体成型が可能な靴。<br>
                     <br>
-                    測定した脳波データから、神経科学における機能的結合性の指標である”debiased estimator of the Weighted Phase Lag Index”を導出し、音や光にマッピング
-する。
+                    実際の着用に耐える機能性を有することを目指し、設計や出力に工夫を行った。
                 </p>
                 <h2>
                 課題、目的
                 </h2>
                 <p>
-                    神経科学の研究内容は社会一般に十分に認知されておらず、過去の定説などに基づく神経神話などが人々の間で広く信じられている現状がある。
-                    本プロジェクトは神経科学の知見に基づいて導出された脳内ネットワークの一部を、正確性と分かりやすさを両立する形で表現し、脳のネットワークの複雑性、神秘性を伝えることを目的とする。
+                    靴は全体重を支えるとともに、歩行を円滑に行うという役割を持っており、ファッションアイテムの中でも機能性やフィット性が重要である。
+しかし、既存の靴では足の全長のみをサイズの基準とする事が多く、足幅や高さ、左右差などはあまり考慮されない。そのため、三次元的な足の形に添った3Dモデルを作成し、出力することで新たな靴の形を試作する。
                 </p>
                 
 
                 <h2>
-                表現の詳細
+                特徴
                 </h2>
                 <img src="workSS_ImageDF.png" alt="フレームの設計画像">
                 <p>
-                    脳の形を模した構造体は3Dプリンターによって作成されている。図形の各点は電極位置に対応しており、各辺はそれらの最短経路である。
+                    ・実際の足の形を3Dスキャナーで測定し、それを元に3Dモデルを作成した。
+                <br>
+                    ・アッパー(足の甲に当たる部分)にはメッシュ構造を採用しており、柔軟性のあるプラスチックで出力することで屈曲性と通気性を担保している。
+                    <br>
+                    ・ソール(靴の底)は中空構造で出力しており、歩行の衝撃を吸収するクッション性を有している。
+                　　<br>
+                    ・ソールの内部にはシャンク（足の力を地面に伝え、歩行を助けるための硬いパーツ）が入れ込まれており、推進力を補助する。
+                    <br>
+                    ・靴紐は足の中心部から少し外側にずらして配置されており、足の甲の中心部に走る太い血管の血流を阻害しない。
+
+                    <br>
+                    ・靴の先端は丸みを帯びた形をしており、指先の窮屈さを防止する。
+                    
                 </p>
 
-                <br>
-
-                <img src="workSS_ImageDS11.png" alt="光を制御するソフトウェア">
-                <p>
-                    各脳領域間ペアにおけるWPLIが高いほど、対応する位置のLEDテープの明るさが強く光る。光の点滅周期はそのWPLIの周波数帯に対応している。（健康被害防止のため、点滅周期は実際の脳波の周波数を元に定数で除算して遅くしている。）
-                </p>
-                <br>
-                
-                <img src="workSS_ImageDS12.png" alt="音を制御するソフトウェア">
-                <p>
-                    事前に決定したコード進行に合わせ、構成音の単音を様々な音色で作成した。音は各周波数の各ペアのWPLIに対応づけられており、あるWPLI値が閾値を超えるとそこに対応付けられた音が再生される。
-
-                </p>
-
-                <br>
-                <br>
-                <img src="workSS_ImageDP2.png" alt="脳波処理のプロセス">
             </div>
 
             <a href="index.html" class="work-nav-btn hide-on-mobile" style="margin-top: 40px;">← Back to Top</a>
