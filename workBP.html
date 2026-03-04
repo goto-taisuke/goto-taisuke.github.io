@@ -5,13 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Software 3 - Portfolio</title>
     <style>
-        /* 基本設定  */
+        /* ▼▼▼ 基本設定 ▼▼▼ */
         :root {
             --glass-bg: rgba(255, 255, 255, 0.65);
             --glass-border: rgba(255, 255, 255, 0.7);
             --text-main: #333;
             --font-base: 'Helvetica Neue', Arial, sans-serif;
             --accent-color: #555;
+        }
+
+        /* ★追加: サイト全体のすべての要素で、余白(padding)と枠線(border)を幅(width)に含める計算にする */
+        *, *::before, *::after {
+            box-sizing: border-box;
         }
 
         body {
@@ -22,7 +27,7 @@
             background-size: 400% 400%;
             animation: gradientBG 20s ease infinite;
             min-height: 100vh;
-            /* ★修正: 画面全体の意図しない横スクロールを完全に防止 */
+            /* 画面全体の意図しない横スクロールを完全に防止 */
             overflow-x: hidden; 
         }
 
@@ -34,7 +39,7 @@
 
         a { text-decoration: none; color: inherit; }
 
-        /* 全体のレイアウト  */
+        /* ▼▼▼ 全体のレイアウト ▼▼▼ */
         .detail-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -45,14 +50,14 @@
             align-items: start; 
         }
 
-        /* 左側：画像/動画ギャラリーエリア  */
+        /* ▼▼▼ 左側：画像/動画ギャラリーエリア ▼▼▼ */
         .gallery-area {
             position: sticky;
             top: 6vh; 
             height: 88vh; 
             display: flex;
             flex-direction: column;
-            width: 100%; /* 横幅を明示 */
+            width: 100%;
         }
 
         /* メインメディア表示枠 */
@@ -95,13 +100,9 @@
 
         /* サムネイル一覧 */
         .thumbnail-list {
-            /* ★修正: 幅を100%に制限し、はみ出た部分だけを横スクロールさせる */
             width: 100%;
-            box-sizing: border-box;
-            display: flex; 
-            gap: 15px; 
-            margin-top: 20px; 
-            overflow-x: auto; 
+            display: flex; gap: 15px; margin-top: 20px; 
+            overflow-x: auto; /* ★横スクロール可能に */
             padding-bottom: 10px;
             flex-shrink: 0; 
         }
@@ -111,12 +112,10 @@
         .thumb-wrapper { position: relative; cursor: pointer; flex-shrink: 0; }
         
         .thumb-img {
-            /* ★修正: サムネイル全体を縮小 */
-            width: 80px; 
-            height: 56px; 
+            /* ★修正: サムネイル全体を少し縮小 */
+            width: 80px; height: 56px; 
             object-fit: cover; border-radius: 8px; transition: 0.3s;
             opacity: 0.4; border: 2px solid transparent; display: block;
-            box-sizing: border-box; /* 枠線が太くなってもレイアウトが崩れないように */
         }
         .thumb-wrapper:hover .thumb-img { opacity: 0.8; }
         
@@ -124,7 +123,7 @@
         .thumb-wrapper.active .thumb-img { 
             opacity: 1; 
             border-color: var(--accent-color); 
-            /* ★修正: 拡大(scale)を削除し、枠線と明るさだけで表現（見切れ防止） */
+            /* ★修正: 拡大効果(scale)を消して端での見切れを完全に防止 */
         }
 
         .video-icon {
@@ -142,7 +141,7 @@
         .work-nav-btn.disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; background: rgba(0,0,0,0.02); }
 
         .work-nav-pc {
-            width: 100%;
+            width: 100%; 
             display: flex;
             justify-content: center; 
             gap: 40px; 
@@ -194,14 +193,14 @@
                 flex: none;
             }
             
-            /* ★修正: スマホ・半画面時はサムネイルをさらに小さくして見やすく */
+            /* ★修正: スマホではサムネイルをさらに小さくして見やすく */
             .thumb-img {
                 width: 70px;
                 height: 50px;
             }
 
             .nav-click-area { width: 20%; opacity: 1; background: transparent; text-shadow: 0 0 5px rgba(0,0,0,0.8); }
-            .info-area { padding: 30px; }
+            .info-area { padding: 30px; } /* スマホの時はガラスの余白を少し減らす */
 
             .hide-on-mobile { display: none !important; }
             .show-on-mobile { 
@@ -365,6 +364,8 @@
             wrappers.forEach((wrapper, index) => {
                 if (index === currentIndex) {
                     wrapper.classList.add('active');
+                    // サムネイルが横スクロール枠から見切れている場合、自動的にスクロールして見せる
+                    wrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
                 } else {
                     wrapper.classList.remove('active');
                 }
