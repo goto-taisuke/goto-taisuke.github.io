@@ -248,3 +248,131 @@
                 <p>
                     ある男が撮影した、異様な世界の映像記録を追体験するゲーム/インタラクティブアート<br>
                     <br>
+                    哲学や再帰性を持ったストーリーを没入体験として統合させることを目的としている
+                </p>
+                
+                <img src="workBP_ImageDU.png" alt="UnrealEngineの画面">
+                <p>
+                    UnrealEngine5を用いた高品質なグラフィックスを特徴としており、家庭用ビデオカメラで撮影したようなざらつきのある映像の質感を工夫した
+                </p>
+
+                <br>
+
+                <p>
+                    文字情報呈示においては、没入感を高めるためにメッセージウィンドウやUIを極力排し、プレイヤーが視線誘導のみで文字情報を得ることのできる3Dテキストを実装した
+                    <br>
+                    カメラの視線ベクトルと対象オブジェクトの内積を計算し、視線が対象を捉えた度合いに応じて、空間に配置した3D文字の不透明度を制御するアルゴリズムを構築した<br>これにより、ボタンを押して読むという記号的な動作を排し、視線を向けるという直感的な動作のみで、情報を読む行為とゲームプレイをシームレスに接続させることを試みた
+                </p>
+            </div>
+
+            <a href="index.html" class="work-nav-btn hide-on-mobile" style="margin-top: 40px;">← Back to Top</a>
+
+            <div class="work-nav-mobile show-on-mobile">
+                <a href="#" class="work-nav-btn disabled">‹ Prev</a>
+                <a href="index.html" class="work-nav-btn main-back">Top</a>
+                <a href="work02.html" class="work-nav-btn disabled">Next ›</a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        const mediaData = [
+            { type: 'image', src: 'workBP_ImageM1.png', thumb: 'workBP_ImageM1.png' },
+            { type: 'image', src: 'workBP_ImageM2.png', thumb: 'workBP_ImageM2.png' },
+            { type: 'image', src: 'workBP_ImageM3.png', thumb: 'workBP_ImageM3.png' },
+            { type: 'image', src: 'workBP_ImageM4.png', thumb: 'workBP_ImageM4.png' },
+            { type: 'image', src: 'workBP_ImageM5.png', thumb: 'workBP_ImageM5.png' }
+        ];
+
+        let currentIndex = 0;
+        const mediaWrapper = document.getElementById('media-wrapper');
+        const thumbContainer = document.getElementById('thumbnail-container');
+
+        function initGallery() {
+            mediaData.forEach((data, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'thumb-wrapper';
+                wrapper.onclick = () => selectMedia(index);
+
+                const thumb = document.createElement('img');
+                thumb.src = data.thumb || data.src; 
+                thumb.className = 'thumb-img';
+                wrapper.appendChild(thumb);
+
+                if(data.type === 'video'){
+                    const icon = document.createElement('div');
+                    icon.className = 'video-icon';
+                    icon.innerHTML = '▶';
+                    wrapper.appendChild(icon);
+                }
+
+                thumbContainer.appendChild(wrapper);
+            });
+            updateMainMedia();
+        }
+
+        function updateMainMedia() {
+            mediaWrapper.style.opacity = 0.3; 
+            
+            setTimeout(() => {
+                mediaWrapper.innerHTML = ''; 
+                const currentData = mediaData[currentIndex];
+
+                if (currentData.type === 'image') {
+                    const img = document.createElement('img');
+                    img.src = currentData.src;
+                    img.className = 'media-content';
+                    mediaWrapper.appendChild(img);
+
+                } else if (currentData.type === 'video') {
+                    const video = document.createElement('video');
+                    video.src = currentData.src;
+                    video.className = 'media-content';
+                    
+                    video.preload = 'metadata'; 
+                    video.controls = true; 
+                    video.autoplay = true; 
+                    video.muted = true;    
+                    
+                    if (currentData.thumb) video.poster = currentData.thumb; 
+                    
+                    mediaWrapper.appendChild(video);
+                }
+                
+                mediaWrapper.style.opacity = 1; 
+            }, 150);
+            
+            updateThumbnails();
+        }
+
+        function changeMedia(direction) {
+            currentIndex += direction;
+            if (currentIndex >= mediaData.length) currentIndex = 0;
+            if (currentIndex < 0) currentIndex = mediaData.length - 1;
+            updateMainMedia();
+        }
+
+        function selectMedia(index) {
+            if (currentIndex === index) return; 
+            currentIndex = index;
+            updateMainMedia();
+        }
+
+        function updateThumbnails() {
+            const wrappers = document.querySelectorAll('.thumb-wrapper');
+            wrappers.forEach((wrapper, index) => {
+                if (index === currentIndex) {
+                    wrapper.classList.add('active');
+                } else {
+                    wrapper.classList.remove('active');
+                }
+            });
+        }
+
+        initGallery();
+    </script>
+
+</body>
+</html>
