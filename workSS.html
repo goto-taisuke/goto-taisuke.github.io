@@ -14,7 +14,7 @@
             --accent-color: #555;
         }
 
-        /* ★サイト全体のすべての要素で、余白と枠線を幅に含める計算にする */
+        /* サイト全体のすべての要素で、余白と枠線を幅に含める計算にする */
         *, *::before, *::after {
             box-sizing: border-box;
         }
@@ -41,7 +41,7 @@
 
         /* ▼▼▼ 全体のレイアウト ▼▼▼ */
         .detail-container {
-            /* ★PCの横幅確保：余白分(80px)を足して元の広さを維持 */
+            /* PCの横幅確保：余白分(80px)を足して元の広さを維持 */
             max-width: 1480px; 
             margin: 0 auto;
             padding: 6vh 40px 100px 40px; 
@@ -59,7 +59,7 @@
             display: flex;
             flex-direction: column;
             width: 100%;
-            /* ★サムネイル増殖によるレイアウト崩れを防ぐ */
+            /* サムネイル増殖によるレイアウト崩れを防ぐ */
             min-width: 0; 
         }
 
@@ -175,7 +175,7 @@
             border-top: 1px solid rgba(0,0,0,0.1); padding-top: 30px;
         }
         .description-body img { width: 100%; height: auto; border-radius: 8px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .description-body h2 { font-size: 1.2rem; font-weight: 300; margin: 30px 0 10px 0; border-left: 3px solid #555; padding-left: 10px; }
+        /* h2の装飾を削除しました */
 
         .hide-on-mobile { display: block; }
         .show-on-mobile { display: none; }
@@ -197,7 +197,7 @@
             }
             .main-image-frame { 
                 height: auto; 
-                /* ★スマホ時は「比率固定(16:9)」で画像が削られないようにする */
+                /* スマホ時は「比率固定(16:9)」で画像が削られないようにする */
                 aspect-ratio: 16 / 9; 
                 flex: none;
             }
