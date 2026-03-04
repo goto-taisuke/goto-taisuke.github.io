@@ -184,15 +184,20 @@
             .gallery-area { 
                 position: static; 
                 height: auto; 
+                /* ★原因解決の魔法の1行！
+                   サムネイルの合計幅が画面幅を超えても、親の箱を右に押し広げないようにするストッパー */
+                min-width: 0; 
             }
-            
-            /* ★修正: スマホ時は「高さ固定」ではなく「比率固定(16:9)」にする */
             .main-image-frame { 
                 height: auto; 
-                aspect-ratio: 16 / 9; /* これで画像が削られずに横幅と一緒に縦幅も縮みます */
+                aspect-ratio: 16 / 9; 
                 flex: none;
             }
             
+            /* サムネイルを小さく、間隔も狭くする設定 */
+            .thumbnail-list {
+                gap: 8px;
+            }
             .thumb-img {
                 width: 70px;
                 height: 50px;
