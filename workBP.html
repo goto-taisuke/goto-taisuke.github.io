@@ -14,6 +14,10 @@
             --accent-color: #555;
         }
 
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0; padding: 0;
             font-family: var(--font-base);
@@ -22,7 +26,6 @@
             background-size: 400% 400%;
             animation: gradientBG 20s ease infinite;
             min-height: 100vh;
-            /* 画面全体の意図しない横スクロールを防止 */
             overflow-x: hidden; 
         }
 
@@ -36,7 +39,7 @@
 
         /* ▼▼▼ 全体のレイアウト ▼▼▼ */
         .detail-container {
-            max-width: 1400px; /* PCでの元の広い横幅 */
+            max-width: 1400px;
             margin: 0 auto;
             padding: 6vh 40px 100px 40px; 
             display: grid;
@@ -52,6 +55,7 @@
             height: 88vh; 
             display: flex;
             flex-direction: column;
+            width: 100%;
         }
 
         /* メインメディア表示枠 */
@@ -94,30 +98,36 @@
 
         /* サムネイル一覧 */
         .thumbnail-list {
-            display: flex; gap: 15px; margin-top: 20px; overflow-x: auto; padding-bottom: 10px;
-            flex-shrink: 0; 
             width: 100%;
-            box-sizing: border-box; /* サムネイル枠のはみ出し防止 */
+            display: flex; gap: 15px; margin-top: 20px; 
+            overflow-x: auto; 
+            padding-bottom: 10px;
+            flex-shrink: 0; 
         }
         .thumbnail-list::-webkit-scrollbar { height: 6px; }
         .thumbnail-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
 
         .thumb-wrapper { position: relative; cursor: pointer; flex-shrink: 0; }
+        
         .thumb-img {
-            width: 100px; height: 70px; object-fit: cover; border-radius: 8px; transition: 0.3s;
+            width: 80px; height: 56px; 
+            object-fit: cover; border-radius: 8px; transition: 0.3s;
             opacity: 0.4; border: 2px solid transparent; display: block;
-            box-sizing: border-box;
         }
         .thumb-wrapper:hover .thumb-img { opacity: 0.8; }
-        /* ★選択中：拡大させず枠線と明るさだけで表現（見切れ防止） */
-        .thumb-wrapper.active .thumb-img { opacity: 1; border-color: var(--accent-color); }
+        
+        /* 選択中のサムネイル */
+        .thumb-wrapper.active .thumb-img { 
+            opacity: 1; 
+            border-color: var(--accent-color); 
+        }
 
         .video-icon {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             color: white; font-size: 1.5rem; text-shadow: 0 0 5px rgba(0,0,0,0.8); pointer-events: none;
         }
 
-        /* ▼▼▼ 作品移動用ナビゲーションボタン ▼▼▼ */
+        /* 作品移動用ナビゲーションボタン  */
         .work-nav-btn {
             display: inline-block; text-decoration: none; color: #555;
             border: 1px solid #999; padding: 10px 25px; border-radius: 30px;
@@ -135,11 +145,9 @@
             padding-top: 20px;
             border-top: 1px solid rgba(0,0,0,0.1); 
             flex-shrink: 0; 
-            box-sizing: border-box;
         }
 
-
-        /* ▼▼▼ 右側：情報エリア ▼▼▼ */
+        /* 右側：情報エリア  */
         .info-area {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
@@ -149,8 +157,6 @@
             padding: 40px;
             text-shadow: 0 0 15px rgba(255,255,255, 0.8);
             margin-top: 0; 
-            /* ★修正：情報エリアの余白が画面外に押し出されるのを防ぐ */
-            box-sizing: border-box; 
         }
 
         h1 { font-size: 2rem; font-weight: 300; margin: 0 0 30px 0; line-height: 1.2; }
@@ -173,35 +179,32 @@
                 grid-template-columns: 1fr; 
                 padding: 40px 20px;
                 gap: 30px;
-                /* ★修正：コンテナ自体が画面幅を超えないようにする */
-                box-sizing: border-box;
                 width: 100%;
             }
             .gallery-area { 
                 position: static; 
                 height: auto; 
             }
+            
+            /* ★修正: スマホ時は「高さ固定」ではなく「比率固定(16:9)」にする */
             .main-image-frame { 
-                height: 50vh; 
+                height: auto; 
+                aspect-ratio: 16 / 9; /* これで画像が削られずに横幅と一緒に縦幅も縮みます */
                 flex: none;
             }
+            
+            .thumb-img {
+                width: 70px;
+                height: 50px;
+            }
+
             .nav-click-area { width: 20%; opacity: 1; background: transparent; text-shadow: 0 0 5px rgba(0,0,0,0.8); }
             .info-area { padding: 30px; }
-
-            /* ★修正：スマホ版のサムネイル間隔とサイズを小さく */
-            .thumbnail-list {
-                gap: 8px; /* 間隔を狭く */
-            }
-            .thumb-img {
-                width: 65px; /* サムネイルを小さく */
-                height: 45px;
-            }
 
             .hide-on-mobile { display: none !important; }
             .show-on-mobile { 
                 display: flex !important; justify-content: space-between; align-items: center; gap: 10px;
                 margin-top: 40px; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 30px;
-                box-sizing: border-box;
             }
             .show-on-mobile .work-nav-btn { flex: 1; padding: 12px 0; font-size: 0.8rem; }
             .show-on-mobile .main-back { flex: 1.2; font-weight: bold; }
