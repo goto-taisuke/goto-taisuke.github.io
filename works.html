@@ -153,13 +153,13 @@
             overflow: hidden;
         }
 
-        /* ★PC版ではボタンを非表示にする（ホバーでわかるため） */
+        /* PC版ではボタンを非表示にする */
         .card-read-more {
             display: none; 
         }
 
 
-        /* ▼▼▼ スマホ対応（1列にする） ▼▼▼ */
+        /* ▼▼▼ スマホ対応（1列にする・デザイン変更） ▼▼▼ */
         @media (max-width: 900px) {
             .page-header {
                 padding: 0 20px;
@@ -176,24 +176,33 @@
 
             .works-grid {
                 grid-template-columns: 1fr;
-                /* ★修正: スマホ時は縦の隙間を大きく取る（100px） */
-                gap: 100px; 
+                gap: 60px; /* 薄い線をなくし、間隔を元に戻しました */
+            }
+
+            .work-card {
+                /* スマホ時のみ、画像とテキストボックスを上下に分ける */
+                display: flex;
+                flex-direction: column;
+                gap: 15px; /* 画像と下の白い四角との隙間 */
+            }
+
+            .card-img-wrapper {
+                margin-bottom: 0; /* gapで管理するため元のマージンを消す */
+            }
+
+            .card-info {
+                /* ★スマホ時のみ、index.htmlと同じ白いガラスボックスにする */
+                background: var(--glass-bg);
+                border: 1px solid var(--glass-border);
+                backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+                border-radius: 24px;
+                box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+                padding: 30px;
             }
 
             .card-title { font-size: 1.5rem; }
             
-            /* ★修正: スマホ時はカードの下に薄い区切り線を引く */
-            .work-card {
-                padding-bottom: 60px; /* 線と下の作品の間の余白 */
-                border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* 薄いグレーの線 */
-            }
-            /* 一番最後の作品には区切り線を引かない */
-            .work-card:last-child {
-                border-bottom: none;
-                padding-bottom: 0;
-            }
-
-            /* ★追加: スマホ版の時だけボタンを表示させる */
+            /* スマホ版の時だけボタンを表示させる */
             .card-read-more {
                 display: inline-block;
                 margin-top: 20px;
@@ -224,7 +233,7 @@
                     <div class="card-meta">2025 | Interface / Art</div>
                     <h2 class="card-title">Suspended Second</h2>
                     <p class="card-desc">複雑な脳活動を光や音として直観的に体感するインターフェース/アート。測定した脳波データから、情報伝達のつながりを表す指標を導出する。</p>
-                    <span class="card-read-more">→ Read More</span>
+                    <span class="card-read-more">Go to page →</span>
                 </div>
             </a>
 
@@ -236,7 +245,7 @@
                     <div class="card-meta">2025 | Product Design </div>
                     <h2 class="card-title">Group Apparel Design</h2>
                     <p class="card-desc">明晰夢の研究活動を行う学生グループのアパレルデザイン。グループの理念を写実的な3Dグラフィックで表現した。</p>
-                    <span class="card-read-more">→ Read More</span>
+                    <span class="card-read-more">Go to page →</span>
                 </div>
             </a>
 
@@ -248,7 +257,7 @@
                     <div class="card-meta">2025 | Software </div>
                     <h2 class="card-title">VR Software for Research</h2>
                     <p class="card-desc">研究活動のために開発したVRソフトウェア。フォトリアルな都市空間を再現しており、建物の高さなどのパラメータを統制して実験が行える。</p>
-                    <span class="card-read-more">→ Read More</span>
+                    <span class="card-read-more">Go to page →</span>
                 </div>
             </a>
 
@@ -260,7 +269,7 @@
                     <div class="card-meta">2025 | Product Design </div>
                     <h2 class="card-title">ZEPHYRON</h2>
                     <p class="card-desc">3Dプリンターを用いて一体成型が可能な靴。実際の着用に耐える機能性を目指し、設計や出力に工夫を行った。</p>
-                    <span class="card-read-more">→ Read More</span>
+                    <span class="card-read-more">Go to page →</span>
                 </div>
             </a>
 
@@ -272,7 +281,7 @@
                     <div class="card-meta">2024 | Software / Interactive Art</div>
                     <h2 class="card-title">Game Software 03</h2>
                     <p class="card-desc">ある男が撮影した、異様な世界の映像記録を追体験するゲーム。UnrealEngine5を用いた高品質なグラフィックスを特徴とする。</p>
-                    <span class="card-read-more">→ Read More</span>
+                    <span class="card-read-more">Go to page →</span>
                 </div>
             </a>
 
