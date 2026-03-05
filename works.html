@@ -102,12 +102,12 @@
         /* 画像を囲む枠（16:9を強制維持） */
         .card-img-wrapper {
             width: 100%;
-            aspect-ratio: 16 / 9; /* ★16:9の比率を維持 */
+            aspect-ratio: 16 / 9; 
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             margin-bottom: 25px;
-            background: rgba(0,0,0,0.05); /* 読み込み前のプレースホルダー色 */
+            background: rgba(0,0,0,0.05); 
             position: relative;
         }
 
@@ -115,17 +115,16 @@
         .card-img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* 隙間なく埋める */
+            object-fit: cover; 
             transition: transform 0.5s ease;
         }
-        /* ホバー時に画像が少しズームする */
         .work-card:hover .card-img {
             transform: scale(1.03);
         }
 
         /* テキスト情報エリア */
         .card-info {
-            padding: 0 10px; /* 画像よりテキストを少し内側に入れると綺麗です */
+            padding: 0 10px; 
         }
 
         .card-meta {
@@ -148,11 +147,15 @@
             line-height: 1.6;
             opacity: 0.8;
             margin: 0;
-            /* ★長すぎる説明文は自動で2行でカット(...)される設定 */
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+        }
+
+        /* ★PC版ではボタンを非表示にする（ホバーでわかるため） */
+        .card-read-more {
+            display: none; 
         }
 
 
@@ -172,12 +175,34 @@
             }
 
             .works-grid {
-                /* スマホ画面では1列にする */
                 grid-template-columns: 1fr;
-                gap: 60px; /* スマホの時は縦の隙間を少し狭める */
+                /* ★修正: スマホ時は縦の隙間を大きく取る（100px） */
+                gap: 100px; 
             }
 
             .card-title { font-size: 1.5rem; }
+            
+            /* ★修正: スマホ時はカードの下に薄い区切り線を引く */
+            .work-card {
+                padding-bottom: 60px; /* 線と下の作品の間の余白 */
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* 薄いグレーの線 */
+            }
+            /* 一番最後の作品には区切り線を引かない */
+            .work-card:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+
+            /* ★追加: スマホ版の時だけボタンを表示させる */
+            .card-read-more {
+                display: inline-block;
+                margin-top: 20px;
+                font-size: 0.9rem;
+                color: #333;
+                border-bottom: 1px solid #333;
+                padding-bottom: 3px;
+                opacity: 0.8;
+            }
         }
     </style>
 </head>
@@ -199,6 +224,7 @@
                     <div class="card-meta">2025 | Interface / Art</div>
                     <h2 class="card-title">Suspended Second</h2>
                     <p class="card-desc">複雑な脳活動を光や音として直観的に体感するインターフェース/アート。測定した脳波データから、情報伝達のつながりを表す指標を導出する。</p>
+                    <span class="card-read-more">→ Read More</span>
                 </div>
             </a>
 
@@ -210,17 +236,19 @@
                     <div class="card-meta">2025 | Product Design </div>
                     <h2 class="card-title">Group Apparel Design</h2>
                     <p class="card-desc">明晰夢の研究活動を行う学生グループのアパレルデザイン。グループの理念を写実的な3Dグラフィックで表現した。</p>
+                    <span class="card-read-more">→ Read More</span>
                 </div>
             </a>
 
             <a href="workVS.html" class="work-card">
                 <div class="card-img-wrapper">
-                    <img src="workVS_ImageM1.jpg" alt="Group Apparel Design" class="card-img">
+                    <img src="workVS_ImageM1.jpg" alt="VR Software for Research" class="card-img">
                 </div>
                 <div class="card-info">
                     <div class="card-meta">2025 | Software </div>
                     <h2 class="card-title">VR Software for Research</h2>
                     <p class="card-desc">研究活動のために開発したVRソフトウェア。フォトリアルな都市空間を再現しており、建物の高さなどのパラメータを統制して実験が行える。</p>
+                    <span class="card-read-more">→ Read More</span>
                 </div>
             </a>
 
@@ -232,20 +260,21 @@
                     <div class="card-meta">2025 | Product Design </div>
                     <h2 class="card-title">ZEPHYRON</h2>
                     <p class="card-desc">3Dプリンターを用いて一体成型が可能な靴。実際の着用に耐える機能性を目指し、設計や出力に工夫を行った。</p>
+                    <span class="card-read-more">→ Read More</span>
                 </div>
             </a>
 
             <a href="workGS3.html" class="work-card">
                 <div class="card-img-wrapper">
-                    <img src="workGS3_ImageM1.jpg" alt="Game Software 03" class="card-img">
+                    <img src="workBP_ImageM1.png" alt="Game Software 03" class="card-img">
                 </div>
                 <div class="card-info">
                     <div class="card-meta">2024 | Software / Interactive Art</div>
                     <h2 class="card-title">Game Software 03</h2>
                     <p class="card-desc">ある男が撮影した、異様な世界の映像記録を追体験するゲーム。UnrealEngine5を用いた高品質なグラフィックスを特徴とする。</p>
+                    <span class="card-read-more">→ Read More</span>
                 </div>
             </a>
-
 
         </div>
     </main>
