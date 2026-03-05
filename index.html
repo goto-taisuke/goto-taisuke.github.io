@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Portfolio</title>
     <style>
-        /* ▼▼▼ 基本設定（変更なし） ▼▼▼ */
+        /* ▼▼▼ 基本設定 ▼▼▼ */
         :root {
             --glass-bg: rgba(255, 255, 255, 0.65);
             --glass-border: rgba(255, 255, 255, 0.7);
@@ -41,7 +41,7 @@
             text-shadow: 0 0 15px rgba(255,255,255, 0.8);
         }
 
-        /* ▼▼▼ ヒーローセクション（変更なし） ▼▼▼ */
+        /* ▼▼▼ ヒーローセクション ▼▼▼ */
         .hero-section { height: 100vh; width: 100%; position: relative; overflow: hidden; }
 
         .hero-art-container {
@@ -75,59 +75,52 @@
         .nav-list li { margin-bottom: 15px; font-size: 1.2rem; font-weight: 300; cursor: pointer; transition: 0.3s; }
         .nav-list li:hover { letter-spacing: 0.1em; color: #000; }
 
+        /* ★未制作ページのグレーアウト＆操作無効化 */
+        .nav-list li.disabled-link {
+            opacity: 0.4;
+            pointer-events: none; /* クリックやホバーアニメーションを完全に無効化 */
+            cursor: default;
+        }
+
         .title-box { position: absolute; bottom: 80px; right: 50px; width: 400px; text-align: right; z-index: 10; }
         .title-box h1 { font-size: 3rem; font-weight: 200; margin: 0 0 10px 0; letter-spacing: 0.1em; }
         .title-box h3 { font-size: 1.5rem; font-weight: 300; margin: 0 0 10px 0; }
         .title-box p { font-size: 1rem; opacity: 0.6; margin: 0; }
 
 
-        /* ▼▼▼ Latest Works セクション（ここを修正） ▼▼▼ */
+        /* ▼▼▼ Latest Works セクション ▼▼▼ */
         .works-section { padding: 100px 50px; max-width: 100%; box-sizing: border-box; }
         .section-title { text-align: center; font-size: 2rem; font-weight: 200; margin-bottom: 80px; opacity: 0.5; }
 
         .work-item { display: flex; align-items: stretch; justify-content: space-between; margin-bottom: 150px; gap: 40px; }
         .work-item:nth-child(even) { flex-direction: row-reverse; }
 
-        .work-image-container { flex: 2.5; max-width: none; min-width: 0; display: flex; }
+        /* 元divだったものをaタグに変更してもスタイルが崩れないように設定 */
+        .work-image-container { 
+            flex: 2.5; max-width: none; min-width: 0; display: flex; 
+            text-decoration: none; /* 念のためのリンク線消し */
+            cursor: pointer;
+        }
         .work-image { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.5s ease; }
         .work-item:hover .work-image { transform: scale(1.02); }
 
         .work-info-box { flex: 1; min-width: 250px; display: flex; flex-direction: column; justify-content: center; }
         
-        .work-title { font-size: 1.5rem; font-weight: 300; margin-bottom: 30px; } /* タイトルの下の余白 */
+        .work-title { font-size: 1.5rem; font-weight: 300; margin-bottom: 30px; } 
 
-        /* ★余白コントロール用のクラス★ */
-        /* 小見出し（素材、ソフトウェアなど） */
-        .label-text {
-            font-size: 0.85rem; 
-            opacity: 0.6; 
-            margin: 0 0 5px 0; /* 下に5pxだけ余白（すぐ下に内容が来るから狭く） */
-        }
-
-        /* 内容（3Dプリント〜、MATLAB〜など） */
-        .value-text {
-            font-size: 0.95rem; 
-            line-height: 1.6;
-            margin: 0 0 25px 0; /* 下に25px余白（次の項目まで空ける） */
-        }
-        
-        /* 長文の説明 */
-        .long-text {
-            font-size: 0.9rem;
-            line-height: 1.8;
-            margin: 0 0 30px 0; /* ボタンとの間を広めに */
-        }
-
+        /* 余白コントロール用のクラス */
+        .label-text { font-size: 0.85rem; opacity: 0.6; margin: 0 0 5px 0; }
+        .value-text { font-size: 0.95rem; line-height: 1.6; margin: 0 0 25px 0; }
+        .long-text { font-size: 0.9rem; line-height: 1.8; margin: 0 0 30px 0; }
 
         .goto-btn { display: inline-block; border-bottom: 1px solid #333; padding-bottom: 5px; font-size: 0.9rem; transition: 0.3s; width: fit-content; }
         .goto-btn:hover { opacity: 0.6; padding-bottom: 8px; }
 
         .footer-link { text-align: center; padding: 50px 0 70px 0; }
-        .see-more-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 15px 40px; border-radius: 40px; font-size: 1rem; transition: 0.3s; }
+        .see-more-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 15px 40px; border-radius: 40px; font-size: 1rem; transition: 0.3s; display: inline-block; }
         .see-more-btn:hover { background: #fff; letter-spacing: 0.1em; }
 
-
-        /* ▼▼▼ スマホ対応（変更なし） ▼▼▼ */
+        /* ▼▼▼ スマホ対応 ▼▼▼ */
         @media (max-width: 900px) {
             .nav-box { top: 20px; left: 20px; width: 150px; }
             .title-box { bottom: 40px; right: 20px; width: 280px; }
@@ -160,11 +153,11 @@
 
         <nav class="glass-box nav-box">
             <ul class="nav-list">
-                <li><a href="#">News (制作中)</a></li>
-                <li><a href="#works">Artwork　(制作中)</a></li>
-                <li><a href="#">Biography (制作中)</a></li>
-                <li><a href="#">Contact (制作中)</a></li>
-                <li style="margin-top:20px; font-size:0.9rem; opacity:0.5;">JP / EN (制作中)</li>
+                <li class="disabled-link">News</li>
+                <li><a href="works.html">Artwork</a></li>
+                <li class="disabled-link">Biography</li>
+                <li class="disabled-link">Contact</li>
+                <li class="disabled-link" style="margin-top:20px; font-size:0.9rem;">JP / EN</li>
             </ul>
         </nav>
 
@@ -180,9 +173,9 @@
         <h2 class="section-title">Latest Works</h2>
 
         <div class="work-item">
-            <div class="work-image-container">
+            <a href="workSS.html" class="work-image-container">
                 <img src="Additional Image 5.png" alt="作品画像" class="work-image">
-            </div>
+            </a>
             <div class="glass-box work-info-box">
                 <h3 class="work-title">Suspended Second</h3>
                 
@@ -205,9 +198,9 @@
         </div>
 
         <div class="work-item">
-            <div class="work-image-container">
+            <a href="workFL.html" class="work-image-container">
                 <img src="workFL_ImageMR.jpg" alt="作品画像" class="work-image">
-            </div>
+            </a>
             <div class="glass-box work-info-box">
                 <h3 class="work-title">Group Apparel Design</h3>
                 
@@ -227,9 +220,9 @@
         </div>
 
         <div class="work-item">
-            <div class="work-image-container">
+            <a href="workVS.html" class="work-image-container">
                 <img src="workVS_ImageM1.jpg" alt="作品画像" class="work-image">
-            </div>
+            </a>
             <div class="glass-box work-info-box">
                 <h3 class="work-title">VR Software for Research</h3>
                 
@@ -241,17 +234,14 @@
 
                 <p class="long-text">
                     研究活動のために開発したVRソフトウェア。<br>フォトリアルな都市空間を再現しており、建物高さや緑化の具合などのパラメータを統制した環境下で実験を行える。
-
                 </p>
 
                 <a href="workVS.html" class="goto-btn">Go to page →</a>
             </div>
         </div>
 
-
-
         <div class="footer-link">
-            <a href="#" class="see-more-btn">See more works</a>
+            <a href="works.html" class="see-more-btn">See more works</a>
         </div>
     </section>
 
