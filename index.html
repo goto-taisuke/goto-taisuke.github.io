@@ -75,10 +75,9 @@
         .nav-list li { margin-bottom: 15px; font-size: 1.2rem; font-weight: 300; cursor: pointer; transition: 0.3s; }
         .nav-list li:hover { letter-spacing: 0.1em; color: #000; }
 
-        /* ★未制作ページのグレーアウト＆操作無効化 */
         .nav-list li.disabled-link {
             opacity: 0.4;
-            pointer-events: none; /* クリックやホバーアニメーションを完全に無効化 */
+            pointer-events: none; 
             cursor: default;
         }
 
@@ -95,10 +94,9 @@
         .work-item { display: flex; align-items: stretch; justify-content: space-between; margin-bottom: 150px; gap: 40px; }
         .work-item:nth-child(even) { flex-direction: row-reverse; }
 
-        /* 元divだったものをaタグに変更してもスタイルが崩れないように設定 */
         .work-image-container { 
             flex: 2.5; max-width: none; min-width: 0; display: flex; 
-            text-decoration: none; /* 念のためのリンク線消し */
+            text-decoration: none; 
             cursor: pointer;
         }
         .work-image { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.5s ease; }
@@ -108,7 +106,6 @@
         
         .work-title { font-size: 1.5rem; font-weight: 300; margin-bottom: 30px; } 
 
-        /* 余白コントロール用のクラス */
         .label-text { font-size: 0.85rem; opacity: 0.6; margin: 0 0 5px 0; }
         .value-text { font-size: 0.95rem; line-height: 1.6; margin: 0 0 25px 0; }
         .long-text { font-size: 0.9rem; line-height: 1.8; margin: 0 0 30px 0; }
@@ -119,6 +116,7 @@
         .footer-link { text-align: center; padding: 50px 0 70px 0; }
         .see-more-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 15px 40px; border-radius: 40px; font-size: 1rem; transition: 0.3s; display: inline-block; }
         .see-more-btn:hover { background: #fff; letter-spacing: 0.1em; }
+
 
         /* ▼▼▼ スマホ対応 ▼▼▼ */
         @media (max-width: 900px) {
@@ -132,12 +130,48 @@
                 height: auto; aspect-ratio: 16/9;
             }
 
-            .works-section { padding: 80px 20px; }
-            .work-item { flex-direction: column; align-items: stretch; gap: 20px; margin-bottom: 100px; }
+            .works-section { padding: 60px 20px; }
+
+            /* ★修正: 作品のまとまり(work-item)を1つのガラスボックスにする */
+            .work-item { 
+                flex-direction: column; 
+                align-items: stretch; 
+                gap: 20px; 
+                margin-bottom: 60px; 
+                
+                /* ガラススタイルを親要素に付与 */
+                background: var(--glass-bg);
+                border: 1px solid var(--glass-border);
+                backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+                border-radius: 24px;
+                box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+                padding: 15px; /* ★ここで枠の中に余白を作り、画像を少し小さく見せる */
+            }
             .work-item:nth-child(even) { flex-direction: column; }
-            .work-image-container { width: 100%; flex: none; height: auto; display: block; }
-            .work-image { width: 100%; height: auto; aspect-ratio: auto; object-fit: contain; }
-            .work-info-box { width: 100%; flex: none; min-width: 0; box-sizing: border-box; }
+
+            .work-image-container { width: 100%; flex: none; height: auto; display: block; border-radius: 12px; overflow: hidden; }
+            .work-image { width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; border-radius: 12px; }
+
+            /* ★修正: 元のガラスボックス(説明欄)は背景や枠線を消して親と一体化させる */
+            .work-item .glass-box.work-info-box { 
+                width: 100%; flex: none; min-width: 0; box-sizing: border-box; 
+                background: transparent;
+                border: none;
+                backdrop-filter: none; -webkit-backdrop-filter: none;
+                box-shadow: none;
+                padding: 10px; /* テキストの位置を少し内側に */
+                text-shadow: none;
+            }
+
+            .work-title { font-size: 1.5rem; margin-bottom: 20px; }
+            
+            /* 長文の省略機能は維持 */
+            .long-text {
+                display: -webkit-box;
+                -webkit-line-clamp: 3; 
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
         }
     </style>
 </head>
