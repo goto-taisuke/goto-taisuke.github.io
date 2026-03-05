@@ -176,33 +176,41 @@
 
             .works-grid {
                 grid-template-columns: 1fr;
-                gap: 60px; /* 薄い線をなくし、間隔を元に戻しました */
+                gap: 40px; /* スマホ時はカードの間隔を少し調整 */
             }
 
             .work-card {
-                /* スマホ時のみ、画像とテキストボックスを上下に分ける */
+                /* ★スマホ時のみ、画像とテキストボックスを1つのガラスボックスにまとめる */
                 display: flex;
                 flex-direction: column;
-                gap: 15px; /* 画像と下の白い四角との隙間 */
-            }
-
-            .card-img-wrapper {
-                margin-bottom: 0; /* gapで管理するため元のマージンを消す */
-            }
-
-            .card-info {
-                /* ★スマホ時のみ、index.htmlと同じ白いガラスボックスにする */
+                gap: 15px; 
+                
                 background: var(--glass-bg);
                 border: 1px solid var(--glass-border);
                 backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
                 border-radius: 24px;
                 box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-                padding: 30px;
+                padding: 15px; /* ★ここで枠の中に余白を作り、画像を少し小さく見せる */
+            }
+
+            .card-img-wrapper {
+                margin-bottom: 0; 
+                border-radius: 12px; /* 外枠が24pxなので内側の角丸を12pxにすると綺麗です */
+                box-shadow: none; /* 全体に影をつけるので画像の影は消す */
+            }
+
+            .card-info {
+                /* ★元々右側にあったテキストエリアの独立スタイルを解除して親に同化 */
+                background: transparent;
+                border: none;
+                backdrop-filter: none; -webkit-backdrop-filter: none;
+                box-shadow: none;
+                padding: 5px 10px 15px; /* テキストの位置を少し内側に */
             }
 
             .card-title { font-size: 1.5rem; }
             
-            /* スマホ版の時だけボタンを表示させる */
+            /* スマホ版の時だけ「Go to page →」ボタンを表示させる */
             .card-read-more {
                 display: inline-block;
                 margin-top: 20px;
@@ -211,6 +219,12 @@
                 border-bottom: 1px solid #333;
                 padding-bottom: 3px;
                 opacity: 0.8;
+                width: fit-content;
+            }
+            
+            /* 長文の省略機能はそのまま維持 */
+            .card-desc {
+                -webkit-line-clamp: 3; /* スマホ時は3行で省略 */
             }
         }
     </style>
